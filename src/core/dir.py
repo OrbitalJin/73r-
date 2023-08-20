@@ -34,11 +34,20 @@ class Folder(MemoryBuffer):
         self._children: list[File | Folder] = []
 
     def list(self) -> list[MemoryBuffer]: return self._children
+    def find(self, name: str) -> MemoryBuffer | None:
+        for child in self._children:
+            if child.name == name: return child
+        return None
 
     def createFile(self, name: str) -> "File":
-        file = File(addr = len(self.children), name = name, parent = self)
+        file = File(addr = len(self._children), name = name, parent = self)
         self.add(file)
         return file
+
+    def createFolder(self, name: str) -> "Folder":
+        folder = Folder(addr = len(self._children), name = name, parent = self)
+        self.add(folder)
+        return folder
 
     def add(self, child: MemoryBuffer) -> None:
         self._children.append(child)
@@ -54,13 +63,13 @@ class Folder(MemoryBuffer):
         return self.children[path]
     
     def tree(self, depth: int = 0):
-        indent: str = "--" * depth
-        print(f"{indent}{self.name}")
+        indent: str = "--" * depth + ">"
+        print(f"{indent} {self.name}")
         if not self.list(): return
         for item in self.list():
             if isinstance(item, Folder): item.tree(depth + 1)
-            else: print(f"{indent}{item.name}")
-
+            else: print(f"--{indent} {item.name}")
+ 
     def __repr__(self) -> str: return f"<Folder({self.name})>"
     def __str__(self) -> str: return f"Folder({self.name})"
 
@@ -128,9 +137,22 @@ def main():
     drive = Disk(name = "/")
     sys.add(drive)
     sys.mount(drive)
-    foo = Folder(addr = 1, name = "foo", parent = drive)
-    drive.add(foo)
-    print(drive.tree())
+    drive.createFolder("bin")
+    drive.createFolder("etc")
+    var = drive.createFolder("var")
+    var.createFolder("log")
+    var.createFile("tmp.txt")
+    drive.createFolder("tmp")
+
+    home = drive.createFolder("home")
+    home.createFolder("guest")
+    home.createFolder("root")
+
+    johan = home.createFolder("Johan")
+    johan.createFile("hello.txt")
+    johan.createFile("world.txt")
+    johan.createFolder("Documents")
+    drive.tree()
 
 
 if __name__ == "__main__":
