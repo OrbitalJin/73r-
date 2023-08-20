@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "73r-"
+version = "0.1.0"
+description = "Terminal based game"
+authors = ["OrbitalJin, Mumei00"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "73r_"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8.5, <3.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
