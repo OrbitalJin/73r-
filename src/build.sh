@@ -1,1 +1,1 @@
-poetry run pyinstaller --onefile game.py
+poetry run pyinstaller --onefile termOS.py --add-data "core:core"

@@ -5,12 +5,14 @@ description = "Terminal based game"
 authors = ["OrbitalJin, Mumei00"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "73r_"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8.5, <3.12"
 pyside6 = "^6.5.2"
 
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^5.13.0"
 
 [build-system]
 requires = ["poetry-core"]
