@@ -1,4 +1,5 @@
 from core.memory_buffer import MemoryBuffer
+from core.dotfile import DotFile
 from core.file import File
 
 class Folder(MemoryBuffer):
@@ -8,25 +9,38 @@ class Folder(MemoryBuffer):
         self._parent: Folder | None = parent
         self._children: list[File | Folder] = []
 
-    def list(self) -> list[MemoryBuffer]: return self._children
+    def list(self) -> list[MemoryBuffer]:
+        return self._children
+
     def find(self, name: str) -> MemoryBuffer | None:
         for child in self._children:
             if child.name == name: return child
         return None
 
     def createFile(self, name: str) -> "File":
-        file = File(addr = len(self._children), name = name, parent = self)
-        self.add(file)
-        return file
+        if not name: return print("File name cannot be empty.")
+        match name[0]:
+            case ".": file = DotFile(addr = len(self._children), name = name, parent = self)
+            case _: file = File(addr = len(self._children), name = name, parent = self)
+        return self.add(file)
 
     def createFolder(self, name: str) -> "Folder":
         folder = Folder(addr = len(self._children), name = name, parent = self)
         self.add(folder)
         return folder
 
-    def add(self, child: MemoryBuffer) -> None:
+    def add(self, child: MemoryBuffer) -> MemoryBuffer:
         self._children.append(child)
         child.parent = self
+        return child
+    
+    def remove(self, name: str) -> None:
+        target = self.find(name = name)
+        if not target: return print(f"File not found: {name}")
+        if isinstance(target, Folder):
+            if target.list(): return print(f"Folder not empty: {name}")
+            else: return self._children.remove(target)
+        else: return self._children.remove(target)
 
     def path(self) -> str:
         if self.parent is None: return "/"
@@ -38,7 +52,25 @@ class Folder(MemoryBuffer):
         if not self.list(): return
         for item in self.list():
             if isinstance(item, Folder): item.tree(depth + 1)
-            else: print(f"--{indent} {item.name}")
+            if isinstance(item, File): print(f"--{indent} {item.name}")
+
+    def folderCount(self) -> int:
+        count = 0
+        for item in self.list():
+            if isinstance(item, Folder): count += 1
+        return count
+    
+    def fileCount(self) -> int:
+        count = 0
+        for item in self.list():
+            if isinstance(item, File): count += 1
+        return count
+    
+    def dotFileCount(self) -> int:
+        count = 0
+        for item in self.list():
+            if isinstance(item, DotFile): count += 1
+        return count
  
     def __repr__(self) -> str: return f"<Folder({self.name})>"
     def __str__(self) -> str: return f"Folder({self.name})"

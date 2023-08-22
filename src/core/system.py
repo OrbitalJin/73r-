@@ -1,4 +1,5 @@
 from core.memory_buffer import MemoryBuffer
+from core.dotfile import DotFile
 from core.folder import Folder
 from core.file import File
 from core.disk import Disk
@@ -18,19 +19,6 @@ class System(MemoryBuffer):
         self._disk = None
         return disk 
     
-    def clear(self):
-        os.system("clear")
-        print(self)
-
-    def ls(self) -> None:
-        dirCount = 0
-        fileCount = 0
-        for item in self.disk.current.list():
-            if isinstance(item, Folder): dirCount += 1
-            if isinstance(item, File): fileCount += 1
-            print(item.name, end = " ")
-        print(f"\n\n{fileCount} file(s), {dirCount} folder(s).")
-
     @property
     def name(self) -> str: return self._name
     @name.setter

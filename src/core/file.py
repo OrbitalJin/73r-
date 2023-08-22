@@ -6,6 +6,7 @@ class File(MemoryBuffer):
         self._name: str = name
         self._content: str = content
         self._parent: MemoryBuffer | None = parent
+        self._type: str = "txt"
 
     def edit(self, content: str) -> None: self.content = content
     def path(self) -> str: return self.parent.path() + "/" + self.name
@@ -15,6 +16,12 @@ class File(MemoryBuffer):
 
     @content.setter
     def content(self, content: str) -> None: self._content = content
+
+    @property
+    def name(self) -> str: return self._name
+    @name.setter
+    def name(self, name: str) -> None:
+        if "." in name: self._name, self._type = name.split(".")
 
     def __repr__(self) -> str: return f"<File({self.name})>"
     def __str__(self) -> str: return f"File({self.name})"
