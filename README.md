@@ -1,7 +1,6 @@
 # TermOS
 
 ## TODO
-- [ ] Implement `history` for shell
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method (within the controller object)
 - [ ] Implement `logger` for system
@@ -9,11 +8,10 @@
 - [ ] Implement `display` for system
 - [ ] Prettifying using Rich
 - [ ] Refactor shell commands as separate classes/entities that can be "attached" to the shell
-
+- [X] Implement `history` for shell
 - [X] Move booting and mainLoopEvents to `system`
 - [X] Implement state saving & loading
 - [X] Implement input with prefill
-
 - [X] Outsourced `tree` to `shell`
 - [X] Prevent files or folders from having the same name
 - [X] Disable `find` on dotfiles

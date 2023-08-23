@@ -4,14 +4,15 @@ from core.file import File
 import inspect
 import os
 
-
+# TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
     """
     The shell is the user interface for the system.
     """
     def __init__(self, sys):
         self.sys = sys
-        self.cogData = self._generateCogData()
+        self._cogData = self._generateCogData()
+        self._history: list[str] = []
 
     def ls(self, args: dict = None) -> None:
         """
@@ -19,7 +20,7 @@ class Shell:
         """
         for item in self.sys.disk.current.list():
             print(item.name, end = " ") if not isinstance(item, DotFile) else None
-        print(f"\n\n{self.sys.disk.current.fileCount()} file(s), {self.sys.disk.current.folderCount()} folder(s).")
+        print(f"\n{self.sys.disk.current.fileCount()} file(s), {self.sys.disk.current.folderCount()} folder(s).")
 
 
     def ll(self, args: dict = None) -> None:
@@ -30,13 +31,12 @@ class Shell:
         for item in self.sys.disk.current.list():
             print(item.parent.name, item.addr, item.type, item.name, sep = "\t")
         print(
-            "\n{fC} file(s), {dfC} dotFile(s), {dirC} folder(s).".format(
+            "{fC} file(s), {dfC} dotFile(s), {dirC} folder(s).".format(
                 fC = self.sys.disk.current.fileCount(),
                 dfC = self.sys.disk.current.dotFileCount(),
                 dirC = self.sys.disk.current.folderCount()
         ))
 
-    # TODO: Implement options for rm e.g rm -r for recursive removal
     def rm(self, args: dict = None) -> None:
         """
         Remove a file or folder. rm <name>
@@ -116,6 +116,12 @@ class Shell:
         if not result: return print(f"File or folder not found: {name}")
         print(f"({result.addr})\t{result.path()}\t{result.type}\t{result.name}")
     
+    def history(self, args: dict = None) -> None:
+        """
+        Display the command history.
+        """
+        for index, cmd in enumerate(self._history): print(f"{index + 1}\t{cmd}")
+
     def clear(self, args: dict = None) -> None:
         """
         Clear the screen.
@@ -129,14 +135,14 @@ class Shell:
         """
         self.sys.saveState(path = "./data/termOS.state")
         self.sys.disk = None
-        print("Saving State...")
+        print("[Terminated] - State Saved")
         exit(1)
 
     def help(self, args: dict = None) -> None:
         """
         Display this help message.
         """
-        for cmd, data in self.cog().items():
+        for cmd, data in self._cogData.items():
             print(f"{cmd} - {data.get('desc')}")
 
     def _tree(self, dir: Folder, depth: int = 0) -> None:
@@ -156,10 +162,7 @@ class Shell:
             result = self._find(item, name)
             if result: return result
         return None
-
-    def cog(self) -> dict:
-        return self.cogData
-
+    
     def _generateCogData(self) -> dict[str, dict]:
         methods = inspect.getmembers(self, predicate = inspect.ismethod)
         cogData = {}
@@ -172,3 +175,7 @@ class Shell:
                         "desc": docstring
                     }
         return cogData
+    
+    def cog(self, cmd: str) -> dict[str, dict] | None:
+        self._history.append(cmd)
+        return self._cogData.get(cmd)

@@ -60,7 +60,7 @@ class System(MemoryBuffer):
         self.shell.clear()
         while self.disk:
             cmd, args = self.collector.prompt(f"{self.disk.current.name} $ ")
-            command = self.shell.cog().get(cmd)
+            command = self.shell.cog(cmd = cmd)
             if not command: print(f"Unknown Command: {cmd}")
             else: command.get("func")(args = args)
 

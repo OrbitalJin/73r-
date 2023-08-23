@@ -20,13 +20,16 @@ class Collector:
         }
         return (self.cmd, self.args)
     
+    # TODO: Fix persistent prefill
     def promptEdit(self, prompt: str, prefill: str = None) -> str | None:
         def hook():
             readline.insert_text(prefill)
             readline.redisplay()
 
         readline.set_pre_input_hook(hook)
-        return input(prompt)
+        result = input(prompt)
+        readline.set_pre_input_hook()
+        return result
     
     def getCmd(self) -> str | None: return self.cmd
     def getArgs(self) -> dict[str, str] | None: return self.args
