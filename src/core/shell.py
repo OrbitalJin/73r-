@@ -12,6 +12,15 @@ class Shell:
         self.sys = sys
         self.cogData = self._generateCogData()
 
+    def find(self, args: dict = None) -> None:
+        """
+        Find a file or folder by name.
+        """
+        name: str = args.get(0)
+        item = self.sys.disk.current.find(name = name)
+        if not item: return print(f"No such file or directory: {name}")
+        print(item)
+
     def ls(self, args: dict = None) -> None:
         """
         List the contents of the current directory.
@@ -25,7 +34,9 @@ class Shell:
         """
         List the contents of the current directory with details.
         """
-        for item in self.sys.disk.current.list(): print(item.name)
+        print("parent\taddr\ttype\tname")
+        for item in self.sys.disk.current.list():
+            print(item.parent.name, item.addr, item.type, item.name, sep = "\t")
         print(
             "\n{fC} file(s), {dfC} dotFile(s), {dirC} folder(s).".format(
                 fC = self.sys.disk.current.fileCount(),
@@ -56,6 +67,8 @@ class Shell:
         """
         Change directory.
         """
+        # if no args, go to root
+        if not args: self.sys.disk.current = self.sys.disk; return
         path: str = args.get(0)
         self.sys.disk.navigate(path = path)
 
@@ -64,20 +77,21 @@ class Shell:
         Create a new folder.
         """
         name: str = args.get(0)
-        self.sys.disk.current.createFolder(name = name)
+        self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
 
     def touch(self, args: dict = None) -> None:
         """
         Create a new file.
         """
         name: str = args.get(0)
-        self.sys.disk.current.createFile(name = name)
+        self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
 
     def edit(self, args: dict = None) -> None:
         """
         Edit the content of a file.
         """
         name: str = args.get(0)
+        # find file by name
         file: File = self.sys.disk.current.find(name = name)
         if not file: return print(f"File not found: {name}")
         content = input("> content: ")

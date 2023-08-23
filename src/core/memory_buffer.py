@@ -4,6 +4,7 @@ class MemoryBuffer:
         self._addr: int = addr
         self._name: str | None = name
         self._parent: MemoryBuffer | None = None
+        self._type: str = "raw"
 
     def rename(self, name: str) -> None: self._name = name
 
@@ -22,6 +23,10 @@ class MemoryBuffer:
     @parent.setter
     def parent(self, parent: "MemoryBuffer") -> None: self._parent = parent
 
+    @property
+    def type(self) -> str: return self._type
+    @type.setter
+    def type(self, type: str) -> None: self._type = type
 
     def __repr__(self) -> str: return f"<MemoryBuffer({self.addr})>"
     def __str__(self) -> str: return f"MemoryBuffer({self.addr})"

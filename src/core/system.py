@@ -11,13 +11,18 @@ class System(MemoryBuffer):
         self._name: str = name
         self._disks: list[Disk] = []
         self._disk: Disk | None = None
+        self._memPtr: int = 0
     
     def add(self, disk: Disk) -> None: self._disks.append(disk)
     def mount(self, disk: Disk) -> None: self._disk = disk
     def unmount(self) -> Disk:
         disk = self._disks.pop(self._disk)
         self._disk = None
-        return disk 
+        return disk
+    
+    def allocate(self) -> int:
+        self._memPtr += 1
+        return self._memPtr
     
     @property
     def name(self) -> str: return self._name

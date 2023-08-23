@@ -6,6 +6,7 @@ class Folder(MemoryBuffer):
     def __init__(self, addr: int, name: str, parent: "Folder" = "/"):
         super().__init__(addr)
         self._name: str = name
+        self._type: str = "dir"
         self._parent: Folder | None = parent
         self._children: list[File | Folder] = []
 
@@ -17,15 +18,15 @@ class Folder(MemoryBuffer):
             if child.name == name: return child
         return None
 
-    def createFile(self, name: str) -> "File":
+    def createFile(self, name: str, addr: int) -> File | DotFile:
         if not name: return print("File name cannot be empty.")
         match name[0]:
-            case ".": file = DotFile(addr = len(self._children), name = name, parent = self)
-            case _: file = File(addr = len(self._children), name = name, parent = self)
+            case ".": file = DotFile(addr = addr, name = name, parent = self)
+            case _: file = File(addr = addr, name = name, parent = self)
         return self.add(file)
 
-    def createFolder(self, name: str) -> "Folder":
-        folder = Folder(addr = len(self._children), name = name, parent = self)
+    def createFolder(self, name: str, addr: int) -> "Folder":
+        folder = Folder(addr = addr, name = name, parent = self)
         self.add(folder)
         return folder
 
@@ -37,22 +38,20 @@ class Folder(MemoryBuffer):
     def remove(self, name: str) -> None:
         target = self.find(name = name)
         if not target: return print(f"File not found: {name}")
-        if isinstance(target, Folder):
-            if target.list(): return print(f"Folder not empty: {name}")
-            else: return self._children.remove(target)
+        if isinstance(target, Folder) and len(target.list()) > 0: return print(f"Folder not empty: {name}")
         else: return self._children.remove(target)
 
     def path(self) -> str:
         if self.parent is None: return "/"
-        return self.parent.path() + "/" + self.name
+        return self.parent.path() + self.name + "/"
     
     def tree(self, depth: int = 0):
         indent: str = "--" * depth + ">"
-        print(f"{indent} {self.name}")
+        print(f"({self.addr})\t{indent} {self.name}")
         if not self.list(): return
         for item in self.list():
             if isinstance(item, Folder): item.tree(depth + 1)
-            if isinstance(item, File): print(f"--{indent} {item.name}")
+            if isinstance(item, File): print(f"({item.addr})\t--{indent} {item.name}")
 
     def folderCount(self) -> int:
         count = 0
