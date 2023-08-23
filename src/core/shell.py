@@ -12,14 +12,17 @@ class Shell:
         self.sys = sys
         self.cogData = self._generateCogData()
 
+    # TODO: Implement options for find e.g find -r for recursive search
     def find(self, args: dict = None) -> None:
         """
-        Find a file or folder by name.
+        Recursively Find a file or folder by name. find <options> <name>
         """
+        if not args: return print("No file or folder name specified. Expecting: find <name>")
         name: str = args.get(0)
-        item = self.sys.disk.current.find(name = name)
-        if not item: return print(f"No such file or directory: {name}")
-        print(item)
+        # Recursively search for the file or folder
+        result = self._find(self.sys.disk.current, name)
+        if not result: return print(f"File or folder not found: {name}")
+        print(f"({result.addr})\t{result.path()}\t{result.type}\t{result.name}")
 
     def ls(self, args: dict = None) -> None:
         """
@@ -44,10 +47,12 @@ class Shell:
                 dirC = self.sys.disk.current.folderCount()
         ))
 
+    # TODO: Implement options for rm e.g rm -r for recursive removal
     def rm(self, args: dict = None) -> None:
         """
-        Remove a file or folder.
+        Remove a file or folder. rm <name>
         """
+        if not args: return print("No file or folder name specified. Expecting: rm <options> <name>")
         name: str = args.get(0)
         self.sys.disk.current.remove(name = name)
 
@@ -65,7 +70,7 @@ class Shell:
 
     def cd(self, args: dict = None) -> None:
         """
-        Change directory.
+        Change directory. cd <path>
         """
         # if no args, go to root
         if not args: self.sys.disk.current = self.sys.disk; return
@@ -74,24 +79,26 @@ class Shell:
 
     def mkdir(self, args: dict = None) -> None:
         """
-        Create a new folder.
+        Create a new folder. mkdir <name>
         """
+        if not args: return print("No folder name specified. Expecting: mkdir <name>")
         name: str = args.get(0)
         self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
 
     def touch(self, args: dict = None) -> None:
         """
-        Create a new file.
+        Create a new file. touch <name>
         """
+        if not args: return print("No file specified. Expecting: touch <name>")
         name: str = args.get(0)
         self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
 
     def edit(self, args: dict = None) -> None:
         """
-        Edit the content of a file.
+        Edit the content of a file. edit <name>
         """
+        if not args: return print("No file specified. Expecting: edit <name>")
         name: str = args.get(0)
-        # find file by name
         file: File = self.sys.disk.current.find(name = name)
         if not file: return print(f"File not found: {name}")
         content = input("> content: ")
@@ -101,6 +108,7 @@ class Shell:
         """
         Display the content of a file.
         """
+        if not args: return print("No file specified. Expecting: cat <name>")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file: return print(f"File not found: {name}")
@@ -112,6 +120,15 @@ class Shell:
         """
         os.system("clear")
         print(self.sys)
+
+    def _find(self, dir: File | DotFile | None, name: str) -> File | DotFile | None:
+        if not dir: return None
+        if dir.name == name: return dir
+        if isinstance(dir, File): return None
+        for item in dir.list():
+            result = self._find(item, name)
+            if result: return result
+        return None
 
     def help(self, args: dict = None) -> None:
         """

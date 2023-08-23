@@ -7,7 +7,6 @@ class File(MemoryBuffer):
         self._content: str = content
         self._parent: MemoryBuffer | None = parent
         self.name = name
-        print(f"Created file {self.name} at {self.path()}")
 
     def edit(self, content: str) -> None: self.content = content
     def path(self) -> str: return self.parent.path() + self.name + "/" 

@@ -1,11 +1,12 @@
 # TermOS
 
 ## TODO
-- [ ] Guard statement for Null args
 - [ ] DotFile & File counting
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method
 - [ ] Prettifying using Rich
+- [X] Implement find - Recursive global search
+- [X] Guard statement for Null args
 - [X] HOT FIX: cd to root directory
 - [X] HOT FIX: cat not working on Files
 - [X] HOT FIX: edit not working on Files
