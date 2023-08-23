@@ -2,7 +2,7 @@ from core.memory_buffer import MemoryBuffer
 from core.io.collector import Collector
 from core.shell import Shell
 from core.disk import Disk
-import pickle
+import pickle, time
 
 class System(MemoryBuffer):
     """
@@ -44,6 +44,26 @@ class System(MemoryBuffer):
         self._memPtr += 1
         return self._memPtr
     
+    def boot(self, path: str) -> "System":
+        """
+        Boot the system.
+        """
+        # Attempt to load a saved state
+        try: self.loadState(path = path)
+        except FileNotFoundError: self.setup()
+        return self
+    
+    def loop(self):
+        """
+        The main loop of the system.
+        """
+        self.shell.clear()
+        while self.disk:
+            cmd, args = self.collector.prompt(f"{self.disk.current.name} $ ")
+            command = self.shell.cog().get(cmd)
+            if not command: print(f"Unknown Command: {cmd}")
+            else: command.get("func")(args = args)
+
     def saveState(self, path: str):
         """
         Save the current state of the system to a file.
@@ -70,6 +90,29 @@ class System(MemoryBuffer):
         self._disk = state["disk"]
         self._memPtr = state["mem_ptr"]
         return self
+    
+    def setup(self) -> None:
+        """
+        Setup the system if no saved state is found.
+        """
+        print("No saved state found. Initializing system...")
+        time.sleep(2)
+        # Setup the root disk
+        drive = Disk(name = "/")
+        self.add(drive)
+        self.mount(drive)
+        # Populate the root disk
+        drive.createFolder("bin", addr = self.allocate())
+        drive.createFolder("etc", addr = self.allocate())
+        drive.createFolder("tmp", addr = self.allocate())
+        # Populate the home directory with dummy users
+        home = drive.createFolder("home", addr = self.allocate())
+        home.createFolder("guest", addr = self.allocate())
+        home.createFolder("root", addr = self.allocate())
+        # Populate the root user's home directory
+        user = home.createFolder("user", addr = self.allocate())
+        user.createFile("Hello.txt", addr = self.allocate())
+        user.createFolder("Documents", addr = self.allocate())
     
     @property
     def disk(self) -> Disk | None: return self._disk
