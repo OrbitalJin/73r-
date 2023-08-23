@@ -1,6 +1,7 @@
 # TermOS
 
 ## TODO
+- [ ] Implement input with prefill
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method (within the controller object)
 - [ ] Prettifying using Rich
