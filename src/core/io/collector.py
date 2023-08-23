@@ -1,7 +1,9 @@
 from typing import Any
+import readline
 
 class Collector:
-    def __init__(self) -> None:
+    def __init__(self, sys) -> None:
+        self.sys = sys
         self.cmd: str | None = None
         self.args: dict[str, str] | None = None
 
@@ -17,6 +19,14 @@ class Collector:
             for index, arg in enumerate(args)
         }
         return (self.cmd, self.args)
+    
+    def promptEdit(self, prompt: str, prefill: str = None) -> str | None:
+        def hook():
+            readline.insert_text(prefill)
+            readline.redisplay()
+
+        readline.set_pre_input_hook(hook)
+        return input(prompt)
     
     def getCmd(self) -> str | None: return self.cmd
     def getArgs(self) -> dict[str, str] | None: return self.args

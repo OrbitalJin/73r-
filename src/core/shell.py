@@ -90,7 +90,8 @@ class Shell:
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
-        content = input("> content: ")
+        print(f"Editing: {file.name}")
+        content = self.sys.collector.promptEdit(prompt = ">>> ", prefill = file.content)
         file.edit(content = content)
     
     def cat(self, args: dict = None) -> None:
@@ -121,6 +122,15 @@ class Shell:
         """
         os.system("clear")
         print(self.sys)
+
+    def exit(self, args: dict = None) -> None:
+        """
+        Exit the system.
+        """
+        self.sys.saveState(path = "./data/termOS.state")
+        self.sys.disk = None
+        print("Saving State...")
+        exit(1)
 
     def help(self, args: dict = None) -> None:
         """

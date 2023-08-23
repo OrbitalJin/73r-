@@ -1,11 +1,16 @@
 # TermOS
 
 ## TODO
-- [ ] Implement input with prefill
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method (within the controller object)
+- [ ] Implement `logger` for system
+- [ ] Implement `io` for system
+- [ ] Implement `display` for system
 - [ ] Prettifying using Rich
 - [ ] Refactor shell commands as separate classes/entities that can be "attached" to the shell
+
+- [X] Implement state saving & loading
+- [X] Implement input with prefill
 
 - [X] Outsourced `tree` to `shell`
 - [X] Prevent files or folders from having the same name
