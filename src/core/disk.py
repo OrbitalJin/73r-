@@ -14,7 +14,7 @@ class Disk(Folder):
             self._current = self._current.parent if self._current.parent else self._current
             return self._current
         
-        dir = self.find(path)
+        dir = self._current.find(path)
         if not dir: return print("No such directory in .")
         self._current = dir
 

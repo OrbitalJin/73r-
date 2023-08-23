@@ -1,11 +1,13 @@
 # TermOS
 
 ## TODO
-- [ ] Prevent files or folders from having the same name
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method (within the controller object)
 - [ ] Prettifying using Rich
+- [ ] Refactor shell commands as separate classes/entities that can be "attached" to the shell
 
+- [X] Outsourced `tree` to `shell`
+- [X] Prevent files or folders from having the same name
 - [X] Disable `find` on dotfiles
 - [X] DotFile & File counting
 - [X] Implement find - Recursive global search

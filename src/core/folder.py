@@ -20,12 +20,15 @@ class Folder(MemoryBuffer):
 
     def createFile(self, name: str, addr: int) -> File | DotFile:
         if not name: return print("File name cannot be empty.")
+        if self.find(name = name): return print(f"Name already in use: {name}")
         match name[0]:
             case ".": file = DotFile(addr = addr, name = name, parent = self)
             case _: file = File(addr = addr, name = name, parent = self)
         return self.add(file)
 
     def createFolder(self, name: str, addr: int) -> "Folder":
+        if not name: return print("File name cannot be empty.")
+        if self.find(name = name): return print(f"Name already in use: {name}")
         folder = Folder(addr = addr, name = name, parent = self)
         self.add(folder)
         return folder

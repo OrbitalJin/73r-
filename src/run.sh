@@ -1,1 +1,1 @@
-poetry run python3 game.py
+poetry run python3 termOS.py

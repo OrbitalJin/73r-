@@ -4,6 +4,7 @@ from core.file import File
 import inspect
 import os
 
+
 class Shell:
     """
     The shell is the user interface for the system.
@@ -48,7 +49,7 @@ class Shell:
         """
         Display the directory structure as a tree.
         """
-        self.sys.disk.current.tree()
+        self._tree(self.sys.disk.current, depth = 0)
 
     def pwd(self, args: dict = None) -> None:
         """
@@ -88,7 +89,7 @@ class Shell:
         if not args: return print("No file specified. Expecting: edit <name>")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
-        if not file: return print(f"File not found: {name}")
+        if not file or not isinstance(file, File): return print(f"File not found: {name}")
         content = input("> content: ")
         file.edit(content = content)
     
@@ -99,7 +100,7 @@ class Shell:
         if not args: return print("No file specified. Expecting: cat <name>")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
-        if not file: return print(f"File not found: {name}")
+        if not file or not isinstance(file, File): return print(f"File not found: {name}")
         print(file.content)
     
     # TODO: Implement options for find e.g find -r for recursive search
@@ -127,6 +128,14 @@ class Shell:
         """
         for cmd, data in self.cog().items():
             print(f"{cmd} - {data.get('desc')}")
+
+    def _tree(self, dir: Folder, depth: int = 0) -> None:
+        if isinstance(dir, File): return
+        indent: str = "--" * depth + ">"
+        print(f"({dir.addr})\t{indent} {dir.name}")
+        for item in dir.list():
+            if isinstance(item, Folder): self._tree(item, depth + 1)
+            if isinstance(item, File): print(f"({item.addr})\t--{indent} {item.name}")
 
     # Recursive search for a file or folder not dotfile
     def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
