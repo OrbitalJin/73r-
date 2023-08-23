@@ -1,13 +1,11 @@
 from core.memory_buffer import MemoryBuffer
-from core.dotfile import DotFile
-from core.folder import Folder
-from core.file import File
+from core.shell import Shell
 from core.disk import Disk
-import os
 
 class System(MemoryBuffer):
     def __init__(self, name: str):
         super().__init__(addr = -1)
+        self.shell: Shell = Shell(self)
         self._name: str = name
         self._disks: list[Disk] = []
         self._disk: Disk | None = None

@@ -62,13 +62,13 @@ class Folder(MemoryBuffer):
     def fileCount(self) -> int:
         count = 0
         for item in self.list():
-            if isinstance(item, File): count += 1
+            if type(item) == File: count += 1
         return count
     
     def dotFileCount(self) -> int:
         count = 0
         for item in self.list():
-            if isinstance(item, DotFile): count += 1
+            if type(item) == DotFile: count += 1
         return count
  
     def __repr__(self) -> str: return f"<Folder({self.name})>"

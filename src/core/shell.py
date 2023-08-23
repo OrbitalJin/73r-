@@ -1,5 +1,5 @@
 from core.dotfile import DotFile
-from core.system import System
+from core.folder import Folder
 from core.file import File
 import inspect
 import os
@@ -8,21 +8,9 @@ class Shell:
     """
     The shell is the user interface for the system.
     """
-    def __init__(self, sys: System):
+    def __init__(self, sys):
         self.sys = sys
         self.cogData = self._generateCogData()
-
-    # TODO: Implement options for find e.g find -r for recursive search
-    def find(self, args: dict = None) -> None:
-        """
-        Recursively Find a file or folder by name. find <options> <name>
-        """
-        if not args: return print("No file or folder name specified. Expecting: find <name>")
-        name: str = args.get(0)
-        # Recursively search for the file or folder
-        result = self._find(self.sys.disk.current, name)
-        if not result: return print(f"File or folder not found: {name}")
-        print(f"({result.addr})\t{result.path()}\t{result.type}\t{result.name}")
 
     def ls(self, args: dict = None) -> None:
         """
@@ -114,6 +102,18 @@ class Shell:
         if not file: return print(f"File not found: {name}")
         print(file.content)
     
+    # TODO: Implement options for find e.g find -r for recursive search
+    def find(self, args: dict = None) -> None:
+        """
+        Recursively Find a file or folder by name. find <options> <name>
+        """
+        if not args: return print("No file or folder name specified. Expecting: find <name>")
+        name: str = args.get(0)
+        # Recursively search for the file or folder
+        result = self._find(self.sys.disk.current, name)
+        if not result: return print(f"File or folder not found: {name}")
+        print(f"({result.addr})\t{result.path()}\t{result.type}\t{result.name}")
+    
     def clear(self, args: dict = None) -> None:
         """
         Clear the screen.
@@ -121,21 +121,22 @@ class Shell:
         os.system("clear")
         print(self.sys)
 
-    def _find(self, dir: File | DotFile | None, name: str) -> File | DotFile | None:
-        if not dir: return None
-        if dir.name == name: return dir
-        if isinstance(dir, File): return None
-        for item in dir.list():
-            result = self._find(item, name)
-            if result: return result
-        return None
-
     def help(self, args: dict = None) -> None:
         """
         Display this help message.
         """
         for cmd, data in self.cog().items():
             print(f"{cmd} - {data.get('desc')}")
+
+    # Recursive search for a file or folder not dotfile
+    def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
+        if dir and dir.name == name and type(dir) != DotFile: return dir
+        if isinstance(dir, File): return None
+
+        for item in dir.list():
+            result = self._find(item, name)
+            if result: return result
+        return None
 
     def cog(self) -> dict:
         return self.cogData

@@ -1,10 +1,13 @@
 # TermOS
 
 ## TODO
-- [ ] DotFile & File counting
+- [ ] Prevent files or folders from having the same name
 - [ ] Implement DotFolders
-- [ ] Handle args within the imlementation of each method
+- [ ] Handle args within the imlementation of each method (within the controller object)
 - [ ] Prettifying using Rich
+
+- [X] Disable `find` on dotfiles
+- [X] DotFile & File counting
 - [X] Implement find - Recursive global search
 - [X] Guard statement for Null args
 - [X] HOT FIX: cd to root directory

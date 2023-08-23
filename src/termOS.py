@@ -1,15 +1,13 @@
 from core.collector import Collector
 from core.system import System
-from core.shell import Shell
 from core.disk import Disk
 
-def boot() -> (System, Shell):
+def boot() -> System:
     sys = System("TermOS")
     drive = Disk(name = "/")
     sys.add(drive)
     sys.mount(drive)
-    shell = Shell(sys)
-    return (sys, shell)
+    return sys
 
 def setup(sys: System) -> None:
     drive = sys.disk
@@ -29,25 +27,18 @@ def setup(sys: System) -> None:
     johan.createFile("world.txt", addr = sys.allocate())
     johan.createFolder("Documents", addr = sys.allocate())
 
-def loop(sys: System, shell: Shell):
+def loop(sys: System):
+    system.shell.clear()
     collector = Collector()
     while sys.disk:
         cmd, args = collector.prompt(f"{sys.disk.current.name} $ ")
         if cmd == "exit": break
-        command = shell.cog().get(cmd)
+        command = sys.shell.cog().get(cmd)
         if not command: print(f"Unknown Command: {cmd}")
         else: command.get("func")(args = args)
 
 
 if __name__ == "__main__":
-    system, shell = boot()
+    system = boot()
     setup(system)
-    shell.clear()
-    loop(system, shell)
-
-# def loop(sys: System, shell: Shell):
-# collector = Input()
-# while sys.disk:
-#     cmd, args = collector.parseArgs(f"{sys.disk.current.name} $ ", ["name", "age", "height"])
-#     if cmd == "exit": break
-    
+    loop(system)    
