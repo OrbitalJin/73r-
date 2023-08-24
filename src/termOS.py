@@ -1,6 +1,7 @@
 from core.system import System
-from core.disk import Disk
-import time
+import readline
+import rich
+
 
 # Entry point
 if __name__ == "__main__":

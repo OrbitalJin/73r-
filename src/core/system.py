@@ -1,8 +1,9 @@
 from core.memory_buffer import MemoryBuffer
 from core.io.collector import Collector
+from core.console import console
 from core.shell import Shell
 from core.disk import Disk
-import pickle, time
+import pickle, time, os
 
 class System(MemoryBuffer):
     """
@@ -49,6 +50,7 @@ class System(MemoryBuffer):
         Boot the system.
         """
         # Attempt to load a saved state
+        self.shell.clear()
         try: self.loadState(path = path)
         except FileNotFoundError: self.setup()
         return self
@@ -59,12 +61,12 @@ class System(MemoryBuffer):
         """
         self.shell.clear()
         while self.disk:
-            cmd, args = self.collector.prompt(f"{self.disk.current.name} $ ")
+            cmd, args = self.collector.readCmd()
             command = self.shell.cog(cmd = cmd)
-            if not command: print(f"Unknown Command: {cmd}")
+            if not command: console.print(f"[red]Unknown Command: {cmd}")
             else: command.get("func")(args = args)
 
-    def saveState(self, path: str):
+    def saveState(self, path: str = "./data/termOS.state"):
         """
         Save the current state of the system to a file.
         """
@@ -95,8 +97,8 @@ class System(MemoryBuffer):
         """
         Setup the system if no saved state is found.
         """
-        print("No saved state found. Initializing system...")
-        time.sleep(2)
+        with console.status("No saved state found. Initializing system..."): time.sleep(3)
+        os.system("mkdir -p ./data")
         # Setup the root disk
         drive = Disk(name = "/")
         self.add(drive)

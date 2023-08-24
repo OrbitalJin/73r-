@@ -73,6 +73,9 @@ class Folder(MemoryBuffer):
         for item in self.list():
             if type(item) == DotFile: count += 1
         return count
+    
+    def count(self) -> int:
+        return len(self.list())
  
     def __repr__(self) -> str: return f"<Folder({self.name})>"
     def __str__(self) -> str: return f"Folder({self.name})"

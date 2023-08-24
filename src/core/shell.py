@@ -1,8 +1,8 @@
+from core.console import console
 from core.dotfile import DotFile
 from core.folder import Folder
 from core.file import File
-import inspect
-import os
+import inspect, sys, os
 
 # TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
@@ -18,20 +18,34 @@ class Shell:
         """
         List the contents of the current directory.
         """
+        if self.sys.disk.current.count() == 0: return console.print("[italic]Empty")
+
         for item in self.sys.disk.current.list():
-            print(item.name, end = " ") if not isinstance(item, DotFile) else None
-        print(f"\n{self.sys.disk.current.fileCount()} file(s), {self.sys.disk.current.folderCount()} folder(s).")
+            if type(item) == Folder: console.print(f"[bold blue]{item.name}[/]", end = " ")
+            if type(item) == File: console.print(f"[green]{item.name}[/]", end = " ")
+        console.print(
+            "\n\n{fC} file(s), {dirC} folder(s).".format(
+                fC = self.sys.disk.current.fileCount(),
+                dirC = self.sys.disk.current.folderCount()
+        ))        
 
 
     def ll(self, args: dict = None) -> None:
         """
         List the contents of the current directory with details.
         """
-        print("parent\taddr\ttype\tname")
+        console.print("[bold blue]Parent\tAddr\tType\tName")
         for item in self.sys.disk.current.list():
-            print(item.parent.name, item.addr, item.type, item.name, sep = "\t")
-        print(
-            "{fC} file(s), {dfC} dotFile(s), {dirC} folder(s).".format(
+            console.print(
+                "{parent}\t{addr}\t{type}\t{name}".format(
+                    parent = item.parent.name if item.parent else "/",
+                    type = item.type,
+                    addr = item.addr,
+                    name = item.name,
+            ))
+        
+        console.print(
+            "\n{fC} file(s), {dfC} .file(s), {dirC} folder(s).".format(
                 fC = self.sys.disk.current.fileCount(),
                 dfC = self.sys.disk.current.dotFileCount(),
                 dirC = self.sys.disk.current.folderCount()
@@ -41,7 +55,7 @@ class Shell:
         """
         Remove a file or folder. rm <name>
         """
-        if not args: return print("No file or folder name specified. Expecting: rm <options> <name>")
+        if not args: return console.print("[red]No file or folder name specified[/]. [italic]Expecting: rm <name>")
         name: str = args.get(0)
         self.sys.disk.current.remove(name = name)
 
@@ -55,7 +69,7 @@ class Shell:
         """
         Print the current directory's path.
         """
-        print(self.sys.disk.current.path())
+        console.print(self.sys.disk.current.path(), style = "bold blue")
 
     def cd(self, args: dict = None) -> None:
         """
@@ -70,7 +84,7 @@ class Shell:
         """
         Create a new folder. mkdir <name>
         """
-        if not args: return print("No folder name specified. Expecting: mkdir <name>")
+        if not args: return console.print("[red]No folder specified[/]. [italic]Expecting: mkdir <name>")
         name: str = args.get(0)
         self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
 
@@ -78,7 +92,7 @@ class Shell:
         """
         Create a new file. touch <name>
         """
-        if not args: return print("No file specified. Expecting: touch <name>")
+        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: touch <name>")
         name: str = args.get(0)
         self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
 
@@ -86,72 +100,80 @@ class Shell:
         """
         Edit the content of a file. edit <name>
         """
-        if not args: return print("No file specified. Expecting: edit <name>")
+        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: edit <name>")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
-        print(f"Editing: {file.name}")
-        content = self.sys.collector.promptEdit(prompt = ">>> ", prefill = file.content)
+        self.clear()
+        console.print(f"[bold](*) TextEdit[/] - [underline]{file.name}[/] | Press [red]Enter\Return[/red] to save and exit.")
+        content = self.sys.collector.promptEdit(prefill = file.content)
         file.edit(content = content)
+        self.clear()
     
     def cat(self, args: dict = None) -> None:
         """
         Display the content of a file.
         """
-        if not args: return print("No file specified. Expecting: cat <name>")
+        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: cat <name>")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
-        print(file.content)
+        console.print(file.content)
     
     # TODO: Implement options for find e.g find -r for recursive search
     def find(self, args: dict = None) -> None:
         """
         Recursively Find a file or folder by name. find <options> <name>
         """
-        if not args: return print("No file or folder name specified. Expecting: find <name>")
+        if not args: return console.print("[red]No file or folder name specified[/]. [italic]Expecting: find <name>")
         name: str = args.get(0)
         # Recursively search for the file or folder
         result = self._find(self.sys.disk.current, name)
         if not result: return print(f"File or folder not found: {name}")
-        print(f"({result.addr})\t{result.path()}\t{result.type}\t{result.name}")
-    
+        # print result
+        console.print(
+            "{type}\t{addr}\t{path}".format(
+                type = result.type,
+                addr = result.addr,
+                path = result.path()
+        ))
+
     def history(self, args: dict = None) -> None:
         """
         Display the command history.
         """
-        for index, cmd in enumerate(self._history): print(f"{index + 1}\t{cmd}")
+        for index, cmd in enumerate(self._history): console.print(f"{index + 1}\t{cmd}")
 
     def clear(self, args: dict = None) -> None:
         """
         Clear the screen.
         """
         os.system("clear")
-        print(self.sys)
+        console.rule("[bold red] TermOS")
 
     def exit(self, args: dict = None) -> None:
         """
         Exit the system.
         """
-        self.sys.saveState(path = "./data/termOS.state")
-        self.sys.disk = None
-        print("[Terminated] - State Saved")
-        exit(1)
+        self.sys.saveState()
+        console.log("Terminated - State Saved")
+        sys.exit(0)
 
     def help(self, args: dict = None) -> None:
         """
         Display this help message.
         """
         for cmd, data in self._cogData.items():
-            print(f"{cmd} - {data.get('desc')}")
+            console.print(f"[bold blue]{cmd}[/] - {data.get('desc')}")
 
+    # Recursive tree traversal
     def _tree(self, dir: Folder, depth: int = 0) -> None:
         if isinstance(dir, File): return
         indent: str = "--" * depth + ">"
         print(f"({dir.addr})\t{indent} {dir.name}")
         for item in dir.list():
             if isinstance(item, Folder): self._tree(item, depth + 1)
-            if isinstance(item, File): print(f"({item.addr})\t--{indent} {item.name}")
+            if isinstance(item, File): console.print(f"({item.addr})\t--{indent} {item.name}")
 
     # Recursive search for a file or folder not dotfile
     def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:

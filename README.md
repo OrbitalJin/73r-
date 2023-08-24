@@ -1,13 +1,15 @@
 # TermOS
 
 ## TODO
+- [ ] Implement multi-line input for editting files
 - [ ] Implement DotFolders
 - [ ] Handle args within the imlementation of each method (within the controller object)
 - [ ] Implement `logger` for system
 - [ ] Implement `io` for system
 - [ ] Implement `display` for system
-- [ ] Prettifying using Rich
 - [ ] Refactor shell commands as separate classes/entities that can be "attached" to the shell
+- [X] Find a platform agnostic alternitive to `readline`
+- [X] Prettifying using Rich
 - [X] Implement `history` for shell
 - [X] Move booting and mainLoopEvents to `system`
 - [X] Implement state saving & loading
