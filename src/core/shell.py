@@ -167,14 +167,26 @@ class Shell:
             console.print(f"[bold blue]{cmd}[/] - {data.get('desc')}")
 
     # Recursive tree traversal
-    def _tree(self, dir: Folder, depth: int = 0) -> None:
-        if isinstance(dir, File): return
-        indent: str = "--" * depth + ">"
-        print(f"({dir.addr})\t{indent} {dir.name}")
-        for item in dir.list():
-            if isinstance(item, Folder): self._tree(item, depth + 1)
-            if isinstance(item, File): console.print(f"({item.addr})\t--{indent} {item.name}")
+    def _tree(self, dir: Folder, depth: int = 0, last: bool = True) -> None:
+        indent: str = "    " * depth + "├── "
+        indent_final : str = "    " * depth + "└── "
 
+        if depth == 0:
+            print(f"{indent_final}{dir.name}")
+        else:
+            if last == True or len(dir.list()) == 1:
+                print(f"{indent_final}{dir.name}")
+            else:
+                print(f"{indent}{dir.name}")
+        for item in dir.list():   
+            if isinstance(item, Folder):
+                self._tree(item, depth + 1,item == dir.list()[-1])
+            if isinstance(item, File):
+                if item == dir.list()[-1]:
+                    print(f"    {indent_final}{item.name}")
+                else:
+                    if isinstance(item, File):
+                        print(f"    {indent}{item.name}")
     # Recursive search for a file or folder not dotfile
     def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
         if dir and dir.name == name and type(dir) != DotFile: return dir
@@ -201,3 +213,14 @@ class Shell:
     def cog(self, cmd: str) -> dict[str, dict] | None:
         self._history.append(cmd)
         return self._cogData.get(cmd)
+
+    # def _tree(self, dir: Folder, depth: int = 0) -> None:
+    #     if isinstance(dir, File): return
+    #     indent: str = "--" * depth + ">"
+    #     print(f"({dir.addr})\t{indent} {dir.name}")
+    #     for item in dir.list():
+    #         if isinstance(item, Folder): self._tree(item, depth + 1)
+    #         if isinstance(item, File): console.print(f"({item.addr})\t--{indent} {item.name}")
+    #
+    #
+    #
