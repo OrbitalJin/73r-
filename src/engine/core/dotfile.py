@@ -1,5 +1,5 @@
-from core.file import File
-from core.memory_buffer import MemoryBuffer
+from engine.core.file import File
+from engine.core.memory_buffer import MemoryBuffer
 
 class DotFile(File):
     def __init__(

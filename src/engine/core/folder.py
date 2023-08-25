@@ -1,6 +1,6 @@
-from core.memory_buffer import MemoryBuffer
-from core.dotfile import DotFile
-from core.file import File
+from engine.core.memory_buffer import MemoryBuffer
+from engine.core.dotfile import DotFile
+from engine.core.file import File
 
 class Folder(MemoryBuffer):
     def __init__(self, addr: int, name: str, parent: "Folder" = "/"):

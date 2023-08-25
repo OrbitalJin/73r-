@@ -1,5 +1,5 @@
-from core.folder import Folder
-from core.file import File
+from engine.core.folder import Folder
+from engine.core.file import File
 
 class Disk(Folder):
     def __init__(self, name: str):

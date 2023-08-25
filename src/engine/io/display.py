@@ -1,4 +1,4 @@
-from core.console import console
+from engine.shell.console import console
 
 class Display:
     def __init__(self, sys) -> None:

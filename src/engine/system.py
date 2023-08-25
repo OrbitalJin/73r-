@@ -1,9 +1,9 @@
-from core.memory_buffer import MemoryBuffer
-from core.io.collector import Collector
-from core.io.display import Display
-from core.console import console
-from core.shell import Shell
-from core.disk import Disk
+from engine.core.memory_buffer import MemoryBuffer
+from engine.io.collector import Collector
+from engine.io.display import Display
+from engine.shell.console import console
+from engine.shell.shell import Shell
+from engine.core.disk import Disk
 import pickle, time, os
 
 class System(MemoryBuffer):

@@ -1,4 +1,4 @@
-from core.system import System
+from engine.system import System
 import readline
 import rich
 

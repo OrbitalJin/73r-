@@ -1,4 +1,4 @@
-from core.memory_buffer import MemoryBuffer
+from engine.core.memory_buffer import MemoryBuffer
 
 class File(MemoryBuffer):
     def __init__(self, addr: int, name: str, content: str = None, parent: MemoryBuffer = None):

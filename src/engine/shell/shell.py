@@ -1,7 +1,7 @@
-from core.console import console
-from core.dotfile import DotFile
-from core.folder import Folder
-from core.file import File
+from engine.shell.console import console
+from engine.core.dotfile import DotFile
+from engine.core.folder import Folder
+from engine.core.file import File
 import inspect, sys, os
 from rich.tree import Tree
 

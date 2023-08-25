@@ -1,5 +1,5 @@
-from core.console import console
-from core.structs import colors
+from engine.shell.console import console
+from engine.interfaces.structs import colors
 from typing import Any
 import readline
 

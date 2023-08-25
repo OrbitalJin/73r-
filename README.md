@@ -1,11 +1,12 @@
 # TermOS
 
 ## TODO
-- [ ] Change folder architecture
+- [ ] Implement `neofetch` in `shell`
 - [ ] Break down `shell` into smaller components i.e. `shell`, `shellCommands` (bin, interfaces, shell.exec) that can be "attached"
 - [ ] Implement DotFolders
 - [ ] Recursive tree using `rich`
 
+- [X] Change folder architecture
 - [X] Override keyoboardinterrupt
 - [X] Implement `io` for system
     - [X] Implement `display` for system
