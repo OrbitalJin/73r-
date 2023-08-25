@@ -3,6 +3,7 @@ from core.dotfile import DotFile
 from core.folder import Folder
 from core.file import File
 import inspect, sys, os
+from rich.tree import Tree
 
 # TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
@@ -13,6 +14,12 @@ class Shell:
         self.sys = sys
         self._cogData = self._generateCogData()
         self._history: list[str] = []
+
+    def warn(self, args: dict = None) -> None:
+        """
+        Display a warning message.
+        """
+        self.sys.display.warning("This is a warning message.")
 
     def ls(self, args: dict = None) -> None:
         """
@@ -28,7 +35,6 @@ class Shell:
                 fC = self.sys.disk.current.fileCount(),
                 dirC = self.sys.disk.current.folderCount()
         ))        
-
 
     def ll(self, args: dict = None) -> None:
         """
@@ -55,7 +61,7 @@ class Shell:
         """
         Remove a file or folder. rm <name>
         """
-        if not args: return console.print("[red]No file or folder name specified[/]. [italic]Expecting: rm <name>")
+        if not args: return self.sys.display.error("No file or folder specified.")
         name: str = args.get(0)
         self.sys.disk.current.remove(name = name)
 
@@ -69,7 +75,7 @@ class Shell:
         """
         Print the current directory's path.
         """
-        console.print(self.sys.disk.current.path(), style = "bold blue")
+        self.sys.display.info(self.sys.disk.current.path(), bold = True)
 
     def cd(self, args: dict = None) -> None:
         """
@@ -84,7 +90,7 @@ class Shell:
         """
         Create a new folder. mkdir <name>
         """
-        if not args: return console.print("[red]No folder specified[/]. [italic]Expecting: mkdir <name>")
+        if not args: return self.sys.display.warning("No folder name specified.")
         name: str = args.get(0)
         self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
 
@@ -92,7 +98,7 @@ class Shell:
         """
         Create a new file. touch <name>
         """
-        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: touch <name>")
+        if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
         self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
 
@@ -100,13 +106,13 @@ class Shell:
         """
         Edit the content of a file. edit <name>
         """
-        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: edit <name>")
+        if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
         self.clear()
-        console.print(f"[bold](*) TextEdit[/] - [underline]{file.name}[/] | Press [red]Enter\Return[/red] to save and exit.")
-        content = self.sys.collector.promptEdit(prefill = file.content)
+        self.sys.display.editorHeader(filename = file.name)
+        content = self.sys.collector.promptEdit(prompt = ">>> ", prefill = file.content)
         file.edit(content = content)
         self.clear()
     
@@ -114,7 +120,7 @@ class Shell:
         """
         Display the content of a file.
         """
-        if not args: return console.print("[red]No file specified[/]. [italic]Expecting: cat <name>")
+        if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
@@ -125,12 +131,10 @@ class Shell:
         """
         Recursively Find a file or folder by name. find <options> <name>
         """
-        if not args: return console.print("[red]No file or folder name specified[/]. [italic]Expecting: find <name>")
+        if not args: return self.sys.display.warning("No file or folder name specified.")
         name: str = args.get(0)
-        # Recursively search for the file or folder
         result = self._find(self.sys.disk.current, name)
         if not result: return print(f"File or folder not found: {name}")
-        # print result
         console.print(
             "{type}\t{addr}\t{path}".format(
                 type = result.type,
@@ -149,14 +153,14 @@ class Shell:
         Clear the screen.
         """
         os.system("clear")
-        console.rule("[bold red] TermOS")
+        self.sys.display.header()
 
     def exit(self, args: dict = None) -> None:
         """
         Exit the system.
         """
         self.sys.saveState()
-        console.log("Terminated - State Saved")
+        self.sys.display.log("Terminated - State Saved")
         sys.exit(0)
 
     def help(self, args: dict = None) -> None:
@@ -164,19 +168,27 @@ class Shell:
         Display this help message.
         """
         for cmd, data in self._cogData.items():
-            console.print(f"[bold blue]{cmd}[/] - {data.get('desc')}")
+            self.sys.display.print(f"[bold blue]{cmd}[/] - {data.get('desc')}")
 
-    # Recursive tree traversal
-    def _tree(self, dir: Folder, depth: int = 0) -> None:
-        if isinstance(dir, File): return
-        indent: str = "--" * depth + ">"
-        print(f"({dir.addr})\t{indent} {dir.name}")
-        for item in dir.list():
-            if isinstance(item, Folder): self._tree(item, depth + 1)
-            if isinstance(item, File): console.print(f"({item.addr})\t--{indent} {item.name}")
+    def _tree(self, dir: Folder, depth: int = 0, last: bool = True) -> None:
+        indent: str = "    " * depth + "├── "
+        indent_final : str = "    " * depth + "└── "
+        if depth == 0: self.sys.display.print(f"{indent_final}{dir.name}")
 
-    # Recursive search for a file or folder not dotfile
+        else:
+            if last == True or len(dir.list()) == 1: self.sys.display.print(f"{indent_final}{dir.name}")
+            else: self.sys.display.print(f"{indent}{dir.name}")
+            
+        for item in dir.list():   
+            if isinstance(item, Folder): self._tree(item, depth + 1, item == dir.list()[-1])
+            if isinstance(item, File):
+                if item == dir.list()[-1]: self.sys.display.print(f"    {indent_final}{item.name}")
+                else: self.sys.display.print(f"    {indent}{item.name}")
+
     def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
+        """
+        Helper Function for find.
+        """
         if dir and dir.name == name and type(dir) != DotFile: return dir
         if isinstance(dir, File): return None
 
@@ -201,3 +213,43 @@ class Shell:
     def cog(self, cmd: str) -> dict[str, dict] | None:
         self._history.append(cmd)
         return self._cogData.get(cmd)
+    
+
+
+# Rich Tree
+# def _tree(self, folder: Folder, depth: int = 0) -> None:
+#     """
+#     Helper Function for tree.
+#     """
+#     if isinstance(dir, File): return
+#     tree: Tree = Tree(folder.name)
+
+#     for item in folder.list():
+#         if isinstance(item, Folder): self._branch(tree, item, depth + 1)
+#         elif isinstance(item, File): tree.add(item.name)
+
+#     self.sys.display.print(tree)
+
+# def _branch(self, tree: Tree, folder: Folder, depth: int) -> None:
+#     """
+#     Helper Function for tree.
+#     """
+#     branch: Tree = Tree(folder.name)
+
+#     for item in folder.list():
+#         if isinstance(item, Folder): self._branch(branch, item, depth + 1)
+#         elif isinstance(item, File): branch.add(item.name)
+
+#     tree.add(branch)
+
+
+#def _tree(self, dir: Folder, depth: int = 0) -> None:
+#     if isinstance(dir, File): return
+#     indent: str = "--" * depth + ">"
+#     print(f"({dir.addr})\t{indent} {dir.name}")
+#     for item in dir.list():
+#         if isinstance(item, Folder): self._tree(item, depth + 1)
+#         if isinstance(item, File): console.print(f"({item.addr})\t--{indent} {item.name}")
+#
+#
+#

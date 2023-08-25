@@ -1,5 +1,6 @@
 from core.memory_buffer import MemoryBuffer
 from core.io.collector import Collector
+from core.io.display import Display
 from core.console import console
 from core.shell import Shell
 from core.disk import Disk
@@ -14,6 +15,7 @@ class System(MemoryBuffer):
         self._name: str = name
         self._shell: Shell = Shell(self)
         self._collector: Collector = Collector(self)
+        self._display: Display = Display(self)
         self._disks: list[Disk] = []
         self._disk: Disk | None = None
         self._memPtr: int = 0
@@ -45,7 +47,7 @@ class System(MemoryBuffer):
         self._memPtr += 1
         return self._memPtr
     
-    def boot(self, path: str) -> "System":
+    def boot(self, path: str = "./data/termOS.state") -> "System":
         """
         Boot the system.
         """
@@ -55,16 +57,13 @@ class System(MemoryBuffer):
         except FileNotFoundError: self.setup()
         return self
     
-    def loop(self):
+    def loop(self) -> None:
         """
         The main loop of the system.
         """
         self.shell.clear()
-        while self.disk:
-            cmd, args = self.collector.readCmd()
-            command = self.shell.cog(cmd = cmd)
-            if not command: console.print(f"[red]Unknown Command: {cmd}")
-            else: command.get("func")(args = args)
+        try: self._loop()
+        except KeyboardInterrupt: print("\n"); self.shell.exit()
 
     def saveState(self, path: str = "./data/termOS.state"):
         """
@@ -73,7 +72,6 @@ class System(MemoryBuffer):
         state = {
             "name": self._name,
             "shell": self._shell,
-            "collector": self._collector,
             "disks": self._disks,
             "disk": self._disk,
             "mem_ptr": self._memPtr
@@ -87,7 +85,6 @@ class System(MemoryBuffer):
         with open(path, 'rb') as f: state = pickle.load(f)
         self._name = state["name"]
         self._shell = state["shell"]
-        self._collector = state["collector"]
         self._disks = state["disks"]
         self._disk = state["disk"]
         self._memPtr = state["mem_ptr"]
@@ -115,6 +112,16 @@ class System(MemoryBuffer):
         user = home.createFolder("user", addr = self.allocate())
         user.createFile("Hello.txt", addr = self.allocate())
         user.createFolder("Documents", addr = self.allocate())
+
+    def _loop(self):
+        """
+        Helper function for the main loop of the system.
+        """
+        while self.disk:
+            cmd, args = self.collector.readCmd()
+            command = self.shell.cog(cmd = cmd)
+            if not command: console.print(f"[red]Unknown Command: {cmd}")
+            else: command.get("func")(args = args)
     
     @property
     def disk(self) -> Disk | None: return self._disk
@@ -125,6 +132,8 @@ class System(MemoryBuffer):
     def shell(self) -> Shell: return self._shell
     @property
     def collector(self) -> Collector: return self._collector
+    @property
+    def display(self) -> Display: return self._display
     
     def __repr__(self) -> str: return f"<System({self.name})>"
     def __str__(self) -> str: return f"System({self.name})"

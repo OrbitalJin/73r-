@@ -41,7 +41,7 @@ class Collector:
             readline.redisplay()
 
         readline.set_pre_input_hook(hook)
-        result = console.input(prompt)
+        result = input(prompt)
         readline.set_pre_input_hook()
         return result
         

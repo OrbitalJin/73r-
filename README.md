@@ -1,13 +1,17 @@
 # TermOS
 
 ## TODO
-- [ ] Implement multi-line input for editting files
+- [ ] Change folder architecture
+- [ ] Break down `shell` into smaller components i.e. `shell`, `shellCommands` (bin, interfaces, shell.exec) that can be "attached"
 - [ ] Implement DotFolders
-- [ ] Handle args within the imlementation of each method (within the controller object)
-- [ ] Implement `logger` for system
-- [ ] Implement `io` for system
-- [ ] Implement `display` for system
-- [ ] Refactor shell commands as separate classes/entities that can be "attached" to the shell
+- [ ] Recursive tree using `rich`
+
+- [X] Override keyoboardinterrupt
+- [X] Implement `io` for system
+    - [X] Implement `display` for system
+    - [X] Implement log in system
+
+- [X] Handle args within the imlementation of each method (within the controller object)
 - [X] Find a platform agnostic alternitive to `readline`
 - [X] Prettifying using Rich
 - [X] Implement `history` for shell
