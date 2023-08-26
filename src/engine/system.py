@@ -119,9 +119,7 @@ class System(MemoryBuffer):
         """
         while self.disk:
             cmd, args = self.collector.readCmd()
-            command = self.shell.cog(cmd = cmd)
-            if not command: console.print(f"[red]Unknown Command: {cmd}")
-            else: command.get("func")(args = args)
+            self.shell.execute(cmd = cmd, args = args)
     
     @property
     def disk(self) -> Disk | None: return self._disk

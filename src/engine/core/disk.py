@@ -17,6 +17,7 @@ class Disk(Folder):
         dir = self._current.find(path)
         if not dir or type(dir) != Folder: return print("No such directory in .")
         self._current = dir
+        return self._current
 
     @property
     def current(self) -> Folder | None: return self._current

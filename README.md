@@ -1,8 +1,6 @@
 # TermOS
 
 ## TODO
-- [ ] Implement `neofetch` in `shell`
-- [ ] Break down `shell` into smaller components i.e. `shell`, `shellCommands` (bin, interfaces, shell.exec) that can be "attached"
 - [ ] Implement DotFolders
 - [ ] Recursive tree using `rich`
 
@@ -12,6 +10,8 @@
     - [X] Implement `display` for system
     - [X] Implement log in system
 
+- [X] Break down `shell` into smaller components i.e. `shell`, `shellCommands` (bin, interfaces, shell.exec) that can be "attached"
+- [X] Implement `fetch` in `shell`
 - [X] Handle args within the imlementation of each method (within the controller object)
 - [X] Find a platform agnostic alternitive to `readline`
 - [X] Prettifying using Rich

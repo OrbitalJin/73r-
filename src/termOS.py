@@ -2,7 +2,6 @@ from engine.system import System
 import readline
 import rich
 
-
 # Entry point
 if __name__ == "__main__":
     system: System = System(name = "termOS")
