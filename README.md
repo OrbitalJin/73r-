@@ -2,6 +2,7 @@
 
 ## TODO
 
+- [ ] Implement `cp` command
 - [ ] Implement DotFolders
 - [ ] Recursive tree using `rich`
 
