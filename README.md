@@ -1,6 +1,7 @@
 # TermOS
 
 ## TODO
+- [ ] Implement option parsing & handling
 - [ ] Implement DotFolders
 - [ ] Recursive tree using `rich`
 

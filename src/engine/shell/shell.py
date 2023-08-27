@@ -66,8 +66,12 @@ class Shell:
         Display this help message.
         """
         for cmd, data in self._cogData.items():
-            self.sys.display.print(f"[bold blue]{cmd}[/] - {data.get('desc')}")
-
+            self.sys.display.print(
+                "[bold blue]{cmd}[/] \t {desc}".format(
+                    cmd  = cmd,
+                    desc = data.get("desc")
+                ))
+            
     def history(self, args: dict = None) -> None:
         """
         Display the command history.

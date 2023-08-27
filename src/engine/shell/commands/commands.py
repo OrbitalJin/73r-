@@ -29,7 +29,6 @@ class Commands:
         data = {}
         for cmd, obj in inspect.getmembers(self):
             if not cmd.startswith("_") and cmd != "cog":
-                print(cmd)
                 data[cmd] = {
                     "func": obj.execute,
                     "desc": obj.description,
