@@ -10,21 +10,11 @@ class ls(Command):
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
-        self.name = "ls"
-        self.description = "List files and folders in the current directory."
         self.usage = "ls [options] [path]"
-        self.options = {
-            "-l": "Display the long format listing.",
-            "-a": "Display all files and folders.",
-            "-h": "Display the help message."
-        }
+        self.options = {"-h": "Display the help message."}
     
-    def execute(
-            self,
-            args: Optional[dict] = None,
-            options: Optional[dict] = None
-        ) -> None:
-
+    def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
+        if options and "-h" in options: return self.sys.display.print(self.help())
         if self.shell.sys.disk.current.count() == 0: return console.print("[italic]Empty")
 
         for item in self.shell.sys.disk.current.list():

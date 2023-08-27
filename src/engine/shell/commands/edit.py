@@ -1,23 +1,18 @@
 from engine.interfaces.command import Command
 from engine.core.file import File
+from typing import Optional
 
 class edit(Command):
     """
-    Edit the content of a file. edit <name>
+    Edit the content of a file.
     """
     def __init__(self, shell):
         super().__init__(shell)
-        self.name = 'edit'
-        self.description = 'Edit a file'
-        self.help = 'Edit a file'
         self.usage = 'edit <file>'
-        self.options = []
+        self.options = {"-h": "Display the help message."}
 
-    def execute(
-            self,
-            args: dict | None = None,
-            options: dict | None = None
-        ) -> None:
+    def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
+        if options and "-h" in options: return self.sys.display.print(self.help())
 
         if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)

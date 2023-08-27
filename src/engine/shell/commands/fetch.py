@@ -1,19 +1,20 @@
 from engine.interfaces.command import Command
-import platform
-import psutil
+from typing import Optional
+import platform, psutil
 
 class fetch(Command):
+    """
+    Display system information.
+    """
     def __init__(self, shell) -> None:
         super().__init__(shell)
         self.name = "fetch"
-        self.description = "Display system information."
         self.usage = "fetch"
-        self.options = None
+        self.options = {"-h": "Display the help message."}
 
-    def execute(self, args: dict = None, options: dict = None) -> None:
-        """
-        Display system information.
-        """
+    def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
+        if options and "-h" in options: return self.sys.display.print(self.help())
+        
         self.sys.display.print(
             "{host}\n{os}\n{cpu}\n{ram}\n{pkgs}"
             .format(

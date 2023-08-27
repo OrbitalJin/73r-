@@ -3,28 +3,23 @@ from engine.shell.console import console
 from engine.core.dotfile import DotFile
 from engine.core.folder import Folder
 from engine.core.file import File
+from typing import Optional
 
 class find(Command):
     """
-    Find a file or folder by name. find <options> <name>
+    Find a file or folder by name.
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
         self.name = "find"
-        self.description = "Find a file or folder in the current directory."
         self.usage = "find [options] [path]"
         self.options = {
             "-h": "Display the help message.",
             "-r": "Recursively find a file or folder by name."
         }
     
-    def execute(
-            self,
-            args: dict | None,
-            options: dict | None
-        ) -> None:
-        if "-h" in options: return self.sys.display.print(self.help())
-
+    def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
+        if options and "-h" in options: return self.sys.display.print(self.help())
         if not args: return self.sys.display.warning("No file or folder name specified. Use 'find -h' for help.")
             
         name: str = args.get(0)

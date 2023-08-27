@@ -3,25 +3,20 @@ from engine.core.folder import Folder
 from engine.core.file import File
 from typing import Optional
 
-
 class tree(Command):
     """
     Display the file system as a tree.
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
-        self.name = "tree"
-        self.description = "Display the file system as a tree."
         self.usage = "tree [options] [path]"
         self.options = {
             "-h": "Display the help message."
         }
     
-    def execute(
-            self,
-            args: Optional[dict] = None,
-            options: Optional[dict] = None
-        ) -> None:
+    def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
+        if options and "-h" in options: return self.sys.display.print(self.help())
+
         self._tree(self.sys.disk.current, depth = 0)
 
     def _tree(self, dir: Folder, depth: int = 0, last: bool = True) -> None:

@@ -41,20 +41,12 @@ class Folder(MemoryBuffer):
     def remove(self, name: str) -> None:
         target = self.find(name = name)
         if not target: return print(f"File not found: {name}")
-        if isinstance(target, Folder) and len(target.list()) > 0: return print(f"Folder not empty: {name}")
+        if isinstance(target, Folder) and not target.isEmpty(): return print(f"Folder not empty: {name}")
         else: return self._children.remove(target)
 
     def path(self) -> str:
         if self.parent is None: return "/"
         return self.parent.path() + self.name + "/"
-    
-    def tree(self, depth: int = 0):
-        indent: str = "--" * depth + ">"
-        print(f"({self.addr})\t{indent} {self.name}")
-        if not self.list(): return
-        for item in self.list():
-            if isinstance(item, Folder): item.tree(depth + 1)
-            if isinstance(item, File): print(f"({item.addr})\t--{indent} {item.name}")
 
     def folderCount(self) -> int:
         count = 0
@@ -76,6 +68,9 @@ class Folder(MemoryBuffer):
     
     def count(self) -> int:
         return len(self.list())
+    
+    def isEmpty(self) -> bool:
+        return len(self.list()) == 0
  
     def __repr__(self) -> str: return f"<Folder({self.name})>"
     def __str__(self) -> str: return f"Folder({self.name})"

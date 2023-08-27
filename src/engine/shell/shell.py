@@ -17,7 +17,7 @@ class Shell:
 
     def cd(self, args: dict = None, options: dict = None) -> None:
         """
-        Change directory. cd <path>
+        Change directory.
         """
         # if no args, go to root
         if not args: self.sys.disk.current = self.sys.disk; return
@@ -32,7 +32,7 @@ class Shell:
 
     def mkdir(self, args: dict = None, options: dict = None) -> None:
         """
-        Create a new folder. mkdir <name>
+        Create a new folder.
         """
         if not args: return self.sys.display.warning("No folder name specified.")
         name: str = args.get(0)
@@ -40,7 +40,7 @@ class Shell:
 
     def touch(self, args: dict = None, options: dict = None) -> None:
         """
-        Create a new file. touch <name>
+        Create a new file.
         """
         if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
