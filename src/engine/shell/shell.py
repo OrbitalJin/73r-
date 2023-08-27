@@ -11,11 +11,11 @@ class Shell:
     """
     def __init__(self, sys):
         self.sys = sys
-        self._commands = Commands(self)
-        self._cogData = self._generateCogData()
-        self._history = []
+        self._commands: Commands   = Commands(self)
+        self._cogData : dict[dict] = self._generateCogData()
+        self._history : list[str]  = []
 
-    def cd(self, args: dict = None) -> None:
+    def cd(self, args: dict = None, options: dict = None) -> None:
         """
         Change directory. cd <path>
         """
@@ -24,13 +24,13 @@ class Shell:
         path: str = args.get(0)
         self.sys.disk.navigate(path = path)
 
-    def pwd(self, args: dict = None) -> None:
+    def pwd(self, args: dict = None, options: dict = None) -> None:
         """
         Print the current directory's path.
         """
         self.sys.display.info(self.sys.disk.current.path(), bold = True)
 
-    def mkdir(self, args: dict = None) -> None:
+    def mkdir(self, args: dict = None, options: dict = None) -> None:
         """
         Create a new folder. mkdir <name>
         """
@@ -38,7 +38,7 @@ class Shell:
         name: str = args.get(0)
         self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
 
-    def touch(self, args: dict = None) -> None:
+    def touch(self, args: dict = None, options: dict = None) -> None:
         """
         Create a new file. touch <name>
         """
@@ -46,14 +46,14 @@ class Shell:
         name: str = args.get(0)
         self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
 
-    def clear(self, args: dict = None) -> None:
+    def clear(self, args: dict = None, options: dict = None) -> None:
         """
         Clear the screen.
         """
         os.system("clear")
         self.sys.display.header()
 
-    def exit(self, args: dict = None) -> None:
+    def exit(self, args: dict = None, options: dict = None) -> None:
         """
         Exit the system.
         """
@@ -61,7 +61,7 @@ class Shell:
         self.sys.display.log("Terminated - State Saved")
         sys.exit(0)
 
-    def help(self, args: dict = None) -> None:
+    def help(self, args: dict = None, options: dict = None) -> None:
         """
         Display this help message.
         """
@@ -72,16 +72,16 @@ class Shell:
                     desc = data.get("desc")
                 ))
             
-    def history(self, args: dict = None) -> None:
+    def history(self, args: dict = None, options: dict = None) -> None:
         """
         Display the command history.
         """
         for index, cmd in enumerate(self._history): console.print(f"{index + 1}\t{cmd}")
 
 
-    def execute(self, cmd: str, args: dict = None) -> None:
+    def execute(self, cmd: str, args: dict = None, options: dict = None) -> None:
         self._history.append(cmd)
-        if cmd in self.cog().keys(): self.cog()[cmd].get("func")(args)
+        if cmd in self.cog().keys(): self.cog()[cmd].get("func")(args, options)
         else: self.sys.display.error(f"Command '{cmd}' not found.")
     
     def cog(self) -> dict: return self._cogData

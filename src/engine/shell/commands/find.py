@@ -20,29 +20,47 @@ class find(Command):
     
     def execute(
             self,
-            args: dict | None = None,
-            options: dict | None = None
+            args: dict | None,
+            options: dict | None
         ) -> None:
-        
-        if not args: return self.sys.display.warning("No file or folder name specified.")
+        if "-h" in options: return self.sys.display.print(self.help())
+
+        if not args: return self.sys.display.warning("No file or folder name specified. Use 'find -h' for help.")
+            
         name: str = args.get(0)
-        result = self._find(self.sys.disk.current, name)
-        if not result: return print(f"File or folder not found: {name}")
+        isRecursive: bool = "-r" in options
+
+        if isRecursive: result = self._rfind(self.sys.disk.current, name)
+        else: result = self._find(self.sys.disk.current, name)
+
+        if not result: return self.sys.display.error(f"File or folder not found: {name}")
         console.print(
             "{type}\t{addr}\t{path}".format(
-                type = result.type,
-                addr = result.addr,
-                path = result.path()
-        ))
+                type=result.type,
+                addr=result.addr,
+                path=result.path()
+            ))
 
     def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
         """
-        Helper Function for find.
+        Helper Function for find. Find a file or folder by name from current directory.
         """
         if dir and dir.name == name and type(dir) != DotFile: return dir
         if isinstance(dir, File): return None
 
         for item in dir.list():
-            result = self._find(item, name)
+            if item.name == name: return item
+        return None
+
+
+    def _rfind(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
+        """
+        Helper Function for find. Recursively find a file or folder by name from a specified directory.
+        """
+        if dir and dir.name == name and type(dir) != DotFile: return dir
+        if isinstance(dir, File): return None
+
+        for item in dir.list():
+            result = self._rfind(item, name)
             if result: return result
         return None

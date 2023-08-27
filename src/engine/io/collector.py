@@ -1,40 +1,39 @@
-from engine.shell.console import console
 from engine.interfaces.structs import colors
 from typing import Any
 import readline
 
 class Collector:
+    """
+    The collector is responsible for collecting user input across the system.
+    """
     def __init__(self, sys) -> None:
         self.sys = sys
-        self.cmd: str | None = None
-        self.args: dict[str, str] | None = None
+        self._cmd: str | None = None
+        self._args: dict[str, str] | None = None
+        self._options: dict[str, str] | None = None
 
     def readCmd(self) -> tuple[str] | None:
-        cmd, args  = self.prompt(
+        """
+        Read a command from the user.
+        """
+        self.cmd, self.args, self.options = self.prompt(
             prompt = "{green}>>>{end} {blue}{path}{end} ".format(
                 green = colors.OKGREEN,
                 blue  = colors.OKCYAN,
                 end   = colors.ENDC,
                 path  = self.sys.disk.current.path(),
             ))
-        return (
-            cmd if cmd else None,
-            args if args else None
-            )
+        return (self.cmd, self.args, self.options)
 
-    def prompt(self, prompt: str) -> tuple[str] | None:
-        entry: Any = input(prompt)
-        if not entry: return (None, None)
-        collection: list[str] = entry.split()
-        if len(collection) == 1: return (collection[0], None)
-        cmd, *args = collection
-        self.cmd = cmd
-        self.args = {
-            index: arg
-            for index, arg in enumerate(args)
-        }
-        return (self.cmd, self.args)
-    
+    def prompt(self, prompt: str) -> tuple[str | None]:
+        """
+        Prompt the user for input.
+        """
+        entry: Any = input(prompt).strip()
+        if not entry: return (None, None, None)
+        self.cmd, self.args, self.options = self._parse(entry)
+        return (self.cmd, self.args, self.options)
+
     def promptEdit(self, prompt: str = "", prefill: str = None) -> str | None:
         def hook():
             readline.insert_text(prefill)
@@ -44,9 +43,59 @@ class Collector:
         result = input(prompt)
         readline.set_pre_input_hook()
         return result
-        
-    def getCmd(self) -> str | None: return self.cmd
-    def getArgs(self) -> dict[str, str] | None: return self.args
+    
+    def _parse(self, entry: str) -> tuple[str | None | dict]:
+        """
+        Parse the user's input.
+        """
+        cmd, args, options = None, {}, {}
+        self.cmd, self.args, self.options = cmd, args, options
+        if not entry: return (None, {}, {})
+        collection: list[str] = entry.split()
+        self.cmd = collection.pop(0)
+        self.options = self._parseOptions(collection)
+        self.args = self._parseArgs(collection)
+        return (self.cmd, self.args, self.options)
+
+    def _parseOptions(self, collection: list[str]) -> dict[str, int]:
+        """
+        Parse the user's options.
+        """
+        options: dict[str, int] = {}
+        pointer: int = 0
+        for arg in collection:
+            if arg.startswith("-"):
+                options[arg] = pointer
+                pointer += 1
+        return options
+    
+    def _parseArgs(self, collection: list[str]) -> dict[int, str]:
+        """
+        Parse the user's arguments.
+        """
+        args: dict[int, str] = {}
+        pointer: int = 0
+        for arg in collection:
+            if not arg.startswith("-"):
+                args[pointer] = arg
+                pointer += 1
+        return args
+
+    @property
+    def cmd(self) -> str | None: return self._cmd
+    @cmd.setter
+    def cmd(self, value: str | None) -> None: self._cmd = value
+
+    @property
+    def args(self) -> dict[str, str] | None: return self._args
+    @args.setter
+    def args(self, value: dict[str, str] | None) -> None: self._args = value
+
+    @property
+    def options(self) -> dict[str, str] | None: return self._options
+    @options.setter
+    def options(self, value: dict[str, str] | None) -> None: self._options = value       
+
 
 
 # def promptEdit(self, prompt: str, prefill: str = None) -> str | None:

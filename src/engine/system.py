@@ -118,8 +118,12 @@ class System(MemoryBuffer):
         Helper function for the main loop of the system.
         """
         while self.disk:
-            cmd, args = self.collector.readCmd()
-            self.shell.execute(cmd = cmd, args = args)
+            cmd, args, options = self.collector.readCmd()
+            self.shell.execute(
+                cmd     = cmd,
+                args    = args,
+                options = options
+            )
     
     @property
     def disk(self) -> Disk | None: return self._disk
