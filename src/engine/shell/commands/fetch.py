@@ -24,6 +24,7 @@ class fetch(Command):
                 pkgs = f":package: pkgs: {len(self.shell.cog())}",
                 ram  = f":brain: ram: {self.ram()}"
         ))
+        self.sys.display.print(f"\nMade with :heart: by {self.sys.author}.")
 
     def ram(self) -> str:
         """

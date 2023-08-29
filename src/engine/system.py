@@ -22,6 +22,7 @@ class System(MemoryBuffer):
         self._disks: list[Disk] = []
         self._disk: Disk | None = None
         self._memPtr: int = 0
+        self._author: str = "Johan & Mumei"
     
     def add(self, disk: Disk) -> None:
         """
@@ -140,6 +141,9 @@ class System(MemoryBuffer):
     def collector(self) -> Collector: return self._collector
     @property
     def display(self) -> Display: return self._display
+
+    @property
+    def author(self) -> str: return self._author
     
     def __repr__(self) -> str: return f"<System({self.name})>"
     def __str__(self) -> str: return f"System({self.name})"
