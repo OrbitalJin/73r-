@@ -1,15 +1,17 @@
+# To prevent running into circular imports, we use the __future__ module
+from __future__ import annotations
+import engine.system as sys
+
 from engine.shell.commands import Commands
 from engine.shell.console import console
-from engine.core.file import File
 import inspect, sys, os
-import platform
 
 # TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
     """
     The shell is the user interface for the system.
     """
-    def __init__(self, sys):
+    def __init__(self, sys: sys.System):
         self.sys = sys
         self._commands: Commands   = Commands(self)
         self._cogData : dict[dict] = self._generateCogData()
@@ -28,13 +30,13 @@ class Shell:
         """
         Print the current directory's path.
         """
-        self.sys.display.info(self.sys.disk.current.path(), bold = True)
+        self.sys.io.display.info(self.sys.disk.current.path(), bold = True)
 
     def mkdir(self, args: dict = None, options: dict = None) -> None:
         """
         Create a new folder.
         """
-        if not args: return self.sys.display.warning("No folder name specified.")
+        if not args: return self.sys.io.display.warning("No folder name specified.")
         name: str = args.get(0)
         self.sys.disk.current.createFolder(name = name, addr = self.sys.malloc())
 
@@ -42,7 +44,7 @@ class Shell:
         """
         Create a new file.
         """
-        if not args: return self.sys.display.warning("No file name specified.")
+        if not args: return self.sys.io.display.warning("No file name specified.")
         name: str = args.get(0)
         self.sys.disk.current.createFile(name = name, addr = self.sys.malloc())
 
@@ -51,14 +53,14 @@ class Shell:
         Clear the screen.
         """
         os.system("clear")
-        self.sys.display.header()
+        self.sys.io.display.header()
 
     def exit(self, args: dict = None, options: dict = None) -> None:
         """
         Exit the system.
         """
         self.sys.saveState()
-        self.sys.display.log("Terminated - State Saved")
+        self.sys.io.display.log("Terminated - State Saved")
         sys.exit(0)
 
     def help(self, args: dict = None, options: dict = None) -> None:
@@ -66,7 +68,7 @@ class Shell:
         Display this help message.
         """
         for cmd, data in self._cogData.items():
-            self.sys.display.print(
+            self.sys.io.display.print(
                 "[bold blue]{cmd}[/] \t {desc}".format(
                     cmd  = cmd,
                     desc = data.get("desc")
@@ -82,7 +84,7 @@ class Shell:
     def execute(self, cmd: str, args: dict = None, options: dict = None) -> None:
         self._history.append(cmd)
         if cmd in self.cog().keys(): self.cog()[cmd].get("func")(args, options)
-        else: self.sys.display.error(f"Command '{cmd}' not found.")
+        else: self.sys.io.display.error(f"Command '{cmd}' not found.")
     
     def cog(self) -> dict: return self._cogData
 
@@ -119,7 +121,7 @@ class Shell:
 #         if isinstance(item, Folder): self._branch(tree, item, depth + 1)
 #         elif isinstance(item, File): tree.add(item.name)
 
-#     self.sys.display.print(tree)
+#     self.sys.io.display.print(tree)
 
 # def _branch(self, tree: Tree, folder: Folder, depth: int) -> None:
 #     """

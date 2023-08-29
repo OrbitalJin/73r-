@@ -12,11 +12,11 @@ class ll(Command):
         self.options = {"-h": "Display the help message."}
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.display.print(self.help())
+        if options and "-h" in options: return self.sys.io.display.print(self.help())
 
         console.print("[bold blue]Parent\tAddr\tType\tName")
         for item in self.sys.disk.current.list():
-            self.sys.display.print(
+            self.sys.io.display.print(
                 "{parent}\t{addr}\t{type}\t{name}".format(
                     parent = item.parent.name if item.parent else "/",
                     type = item.type,
@@ -24,7 +24,7 @@ class ll(Command):
                     name = item.name,
             ))
         
-        self.sys.display.print(
+        self.sys.io.display.print(
             "\n{fC} file(s), {dfC} .file(s), {dirC} folder(s).".format(
                 fC = self.sys.disk.current.fileCount(),
                 dfC = self.sys.disk.current.dotFileCount(),

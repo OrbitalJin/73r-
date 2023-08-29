@@ -17,12 +17,12 @@ class rm(Command):
         }
 
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.display.print(self.help())
+        if options and "-h" in options: return self.sys.io.display.print(self.help())
 
-        if not args: return self.sys.display.warning("No file or folder specified. Use -h for help.")
+        if not args: return self.sys.io.display.warning("No file or folder specified. Use -h for help.")
         name: str = args.get(0)
         target = self.sys.disk.current.find(name = name)
-        if not target: return self.sys.display.error(f"File or folder not found: {name}")
+        if not target: return self.sys.io.display.error(f"File or folder not found: {name}")
 
         isRecursive: bool = "-r" in options
         if isRecursive: self._rrm(target)

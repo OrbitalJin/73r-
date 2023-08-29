@@ -13,9 +13,9 @@ class fetch(Command):
         self.options = {"-h": "Display the help message."}
 
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.display.print(self.help())
+        if options and "-h" in options: return self.sys.io.display.print(self.help())
         
-        self.sys.display.print(
+        self.sys.io.display.print(
             "{host}\n{os}\n{cpu}\n{ram}\n{pkgs}"
             .format(
                 os   = f":computer_disk: os: {self.sys.name}",
@@ -24,7 +24,7 @@ class fetch(Command):
                 pkgs = f":package: pkgs: {len(self.shell.cog())}",
                 ram  = f":brain: ram: {self.ram()}"
         ))
-        self.sys.display.print(f"\nMade with :heart: by {self.sys.author}.")
+        self.sys.io.display.print(f"\nMade with :heart: by {self.sys.author}.")
 
     def ram(self) -> str:
         """

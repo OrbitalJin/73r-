@@ -1,3 +1,7 @@
+# To prevent running into circular imports when annotating, we use the __future__ module
+from __future__ import annotations
+import engine.system as sys
+
 from engine.interfaces.structs import colors
 from typing import Any
 import readline
@@ -6,7 +10,7 @@ class Collector:
     """
     The collector is responsible for collecting user input across the system.
     """
-    def __init__(self, sys) -> None:
+    def __init__(self, sys: sys.System) -> None:
         self.sys = sys
         self._cmd: str | None = None
         self._args: dict[str, str] | None = None

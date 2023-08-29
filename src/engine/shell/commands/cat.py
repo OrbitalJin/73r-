@@ -12,10 +12,10 @@ class cat(Command):
         self.options = None
 
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.display.print(self.help())
+        if options and "-h" in options: return self.sys.io.display.print(self.help())
 
-        if not args: return self.sys.display.warning("No file name specified. Use -h for help.")
+        if not args: return self.sys.io.display.warning("No file name specified. Use -h for help.")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
         if not file or not isinstance(file, File | DotFile): return print(f"File not found: {name}")
-        self.sys.display.print(file.content)
+        self.sys.io.display.print(file.content)

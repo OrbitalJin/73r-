@@ -19,8 +19,8 @@ class find(Command):
         }
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.display.print(self.help())
-        if not args: return self.sys.display.warning("No file or folder name specified. Use 'find -h' for help.")
+        if options and "-h" in options: return self.sys.io.display.print(self.help())
+        if not args: return self.sys.io.display.warning("No file or folder name specified. Use 'find -h' for help.")
             
         name: str = args.get(0)
         isRecursive: bool = "-r" in options
@@ -28,10 +28,10 @@ class find(Command):
         if isRecursive: result = self._rfind(self.sys.disk.current, name)
         else: result = self._find(self.sys.disk.current, name)
 
-        if not result: return self.sys.display.error(f"File or folder not found: {name}")
+        if not result: return self.sys.io.display.error(f"File or folder not found: {name}")
 
-        self.sys.display.print("[blue bold]Type\tAddr\tPath")
-        self.sys.display.print(
+        self.sys.io.display.print("[blue bold]Type\tAddr\tPath")
+        self.sys.io.display.print(
             "{type}\t{addr}\t{path}".format(
                 type = result.type,
                 addr = result.addr,

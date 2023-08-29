@@ -16,7 +16,7 @@ class Disk(Folder):
             return self._current
         
         folder = self._current.find(path)
-        if not folder or not isinstance(folder, Folder): return self.sys.display.warning("No such directory in .")
+        if not folder or not isinstance(folder, Folder): return self.sys.io.display.warning("No such directory in .")
         self._current = folder
         return self._current
     

@@ -1,12 +1,11 @@
 from engine.core.memory_buffer import MemoryBuffer
 from engine.core.disk import Disk
 
-from engine.shell.console import console
 
+from engine.io.ioController import IOController
 from engine.shell.shell import Shell
-from engine.io.collector import Collector
-from engine.io.display import Display
 
+from engine.shell.console import console
 import pickle, time, os
 
 class System(MemoryBuffer):
@@ -17,8 +16,7 @@ class System(MemoryBuffer):
         super().__init__(addr = -1)
         self._name: str = name
         self._shell: Shell = Shell(self)
-        self._collector: Collector = Collector(self)
-        self._display: Display = Display(self)
+        self._io: IOController = IOController(self)
         self._disks: list[Disk] = []
         self._disk: Disk | None = None
         self._memPtr: int = 0
@@ -123,7 +121,7 @@ class System(MemoryBuffer):
         Helper function for the main loop of the system.
         """
         while self.disk:
-            cmd, args, options = self.collector.readCmd()
+            cmd, args, options = self.io.collector.readCmd()
             self.shell.execute(
                 cmd     = cmd,
                 args    = args,
@@ -138,9 +136,7 @@ class System(MemoryBuffer):
     @property
     def shell(self) -> Shell: return self._shell
     @property
-    def collector(self) -> Collector: return self._collector
-    @property
-    def display(self) -> Display: return self._display
+    def io(self) -> IOController: return self._io
 
     @property
     def author(self) -> str: return self._author
