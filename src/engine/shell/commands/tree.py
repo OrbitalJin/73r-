@@ -5,11 +5,11 @@ from typing import Optional
 
 class tree(Command):
     """
-    Display the file system as a tree.
+    Display the current directory tree.
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
-        self.usage = "tree [options] [path]"
+        self.usage = "tree"
         self.options = {
             "-h": "Display the help message."
         }
@@ -29,7 +29,7 @@ class tree(Command):
             else: self.sys.display.print(f"{indent}{dir.name}")
             
         for item in dir.list():   
-            if isinstance(item, Folder): self._tree(item, depth + 1, item == dir.list()[-1])
+            if type(item) == Folder: self._tree(item, depth + 1, item == dir.list()[-1])
             if isinstance(item, File):
                 if item == dir.list()[-1]: self.sys.display.print(f"    {indent_final}{item.name}")
                 else: self.sys.display.print(f"    {indent}{item.name}")

@@ -1,9 +1,12 @@
 from engine.core.memory_buffer import MemoryBuffer
+from engine.core.disk import Disk
+
+from engine.shell.console import console
+
+from engine.shell.shell import Shell
 from engine.io.collector import Collector
 from engine.io.display import Display
-from engine.shell.console import console
-from engine.shell.shell import Shell
-from engine.core.disk import Disk
+
 import pickle, time, os
 
 class System(MemoryBuffer):
@@ -30,6 +33,7 @@ class System(MemoryBuffer):
         """
         Mount a disk to the system.
         """
+        disk.sys = self
         self._disk = disk
 
     def unmount(self) -> Disk:
@@ -40,7 +44,7 @@ class System(MemoryBuffer):
         self._disk = None
         return disk
     
-    def allocate(self) -> int:
+    def malloc(self) -> int:
         """
         Allocate a memory address.
         """
@@ -101,17 +105,17 @@ class System(MemoryBuffer):
         self.add(drive)
         self.mount(drive)
         # Populate the root disk
-        drive.createFolder("bin", addr = self.allocate())
-        drive.createFolder("etc", addr = self.allocate())
-        drive.createFolder("tmp", addr = self.allocate())
+        drive.createFolder("bin", addr = self.malloc())
+        drive.createFolder("etc", addr = self.malloc())
+        drive.createFolder("tmp", addr = self.malloc())
         # Populate the home directory with dummy users
-        home = drive.createFolder("home", addr = self.allocate())
-        home.createFolder("guest", addr = self.allocate())
-        home.createFolder("root", addr = self.allocate())
+        home = drive.createFolder("home", addr = self.malloc())
+        home.createFolder("guest", addr = self.malloc())
+        home.createFolder("root", addr = self.malloc())
         # Populate the root user's home directory
-        user = home.createFolder("user", addr = self.allocate())
-        user.createFile("Hello.txt", addr = self.allocate())
-        user.createFolder("Documents", addr = self.allocate())
+        user = home.createFolder("user", addr = self.malloc())
+        user.createFile("Hello.txt", addr = self.malloc())
+        user.createFolder("Documents", addr = self.malloc())
 
     def _loop(self):
         """

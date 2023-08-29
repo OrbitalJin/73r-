@@ -36,7 +36,7 @@ class Shell:
         """
         if not args: return self.sys.display.warning("No folder name specified.")
         name: str = args.get(0)
-        self.sys.disk.current.createFolder(name = name, addr = self.sys.allocate())
+        self.sys.disk.current.createFolder(name = name, addr = self.sys.malloc())
 
     def touch(self, args: dict = None, options: dict = None) -> None:
         """
@@ -44,7 +44,7 @@ class Shell:
         """
         if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
-        self.sys.disk.current.createFile(name = name, addr = self.sys.allocate())
+        self.sys.disk.current.createFile(name = name, addr = self.sys.malloc())
 
     def clear(self, args: dict = None, options: dict = None) -> None:
         """

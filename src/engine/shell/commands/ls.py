@@ -1,8 +1,8 @@
 from typing import Optional
 from engine.interfaces.command import Command
 from engine.shell.console import console
-from engine.core.folder import Folder
-from engine.core.file import File
+from engine.core import Folder
+from engine.core import File
 
 class ls(Command):
     """

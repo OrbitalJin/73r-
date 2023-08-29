@@ -1,6 +1,9 @@
 from engine.core.memory_buffer import MemoryBuffer
 
 class File(MemoryBuffer):
+    """
+    A file.
+    """
     def __init__(self, addr: int, name: str, content: str = None, parent: MemoryBuffer = None):
         super().__init__(addr)
         self._name: str = name
@@ -28,3 +31,32 @@ class File(MemoryBuffer):
     def __repr__(self) -> str: return f"<File({self.name})>"
     def __str__(self) -> str: return f"File({self.name})"
 
+class DotFile(File):
+    """
+    A dotfile.
+    """
+    def __init__(
+            self,
+            addr: int,
+            name: str,
+            content: str = None,
+            parent: MemoryBuffer = None
+            ):
+        super().__init__(
+            addr = addr,
+            name = name,
+            content = content,
+            parent = parent
+        )
+    
+    @property
+    def name(self) -> str: return "." + self._name
+    @name.setter
+    def name(self, name: str) -> None:
+        self._type = "raw"
+        match name.count("."):
+            case 0: self._name = name
+            case 1: self._name = name[1:]
+            case 2: 
+                self._name = name.split(".")[1]
+                self._type = name.split(".")[-1]

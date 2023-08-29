@@ -1,13 +1,13 @@
+from engine.core.memory_buffer import MemoryBuffer
+from engine.core.folder import Folder, DotFolder
+from engine.core.file import File, DotFile
+
 from engine.interfaces.command import Command
-from engine.shell.console import console
-from engine.core.dotfile import DotFile
-from engine.core.folder import Folder
-from engine.core.file import File
 from typing import Optional
 
 class find(Command):
     """
-    Find a file or folder by name.
+    Find a file or folder by name in the current folderectory.
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
@@ -15,7 +15,7 @@ class find(Command):
         self.usage = "find [options] [path]"
         self.options = {
             "-h": "Display the help message.",
-            "-r": "Recursively find a file or folder by name."
+            "-r": "Recursively find a file or folder by name starting from the current folderectory."
         }
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
@@ -29,33 +29,33 @@ class find(Command):
         else: result = self._find(self.sys.disk.current, name)
 
         if not result: return self.sys.display.error(f"File or folder not found: {name}")
-        console.print(
+
+        self.sys.display.print("[blue bold]Type\tAddr\tPath")
+        self.sys.display.print(
             "{type}\t{addr}\t{path}".format(
-                type=result.type,
-                addr=result.addr,
-                path=result.path()
+                type = result.type,
+                addr = result.addr,
+                path = result.path()
             ))
 
-    def _find(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
+    def _find(self, folder: Folder, name: str) -> File | Folder | None:
         """
-        Helper Function for find. Find a file or folder by name from current directory.
+        Helper Function for find. Find a file or folder by name from current folderectory.
         """
-        if dir and dir.name == name and type(dir) != DotFile: return dir
-        if isinstance(dir, File): return None
-
-        for item in dir.list():
-            if item.name == name: return item
+        for item in folder.list():
+            if not isinstance(item, DotFile | DotFolder):
+                if item.name == name: return item
         return None
 
-
-    def _rfind(self, dir: Folder, name: str) -> File | DotFile | Folder | None:
+    def _rfind(self, folder: MemoryBuffer, name: str) -> File | Folder | None:
         """
-        Helper Function for find. Recursively find a file or folder by name from a specified directory.
+        Helper Function for find. Recursively find a file or folder by name from a specified folderectory.
         """
-        if dir and dir.name == name and type(dir) != DotFile: return dir
-        if isinstance(dir, File): return None
-
-        for item in dir.list():
-            result = self._rfind(item, name)
-            if result: return result
+        if isinstance(folder, DotFolder | DotFile): return None
+        if folder.name == name: return folder
+        
+        if not isinstance(folder, File):
+            for item in folder.list():
+                result = self._rfind(item, name)
+                if result: return result
         return None

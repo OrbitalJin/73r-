@@ -1,8 +1,10 @@
 from engine.core.memory_buffer import MemoryBuffer
-from engine.core.dotfile import DotFile
-from engine.core.file import File
+from engine.core.file import File, DotFile
 
 class Folder(MemoryBuffer):
+    """
+    A folder.
+    """
     def __init__(self, addr: int, name: str, parent: "Folder" = "/"):
         super().__init__(addr)
         self._name: str = name
@@ -29,9 +31,10 @@ class Folder(MemoryBuffer):
     def createFolder(self, name: str, addr: int) -> "Folder":
         if not name: return print("File name cannot be empty.")
         if self.find(name = name): return print(f"Name already in use: {name}")
-        folder = Folder(addr = addr, name = name, parent = self)
-        self.add(folder)
-        return folder
+        match name[0]:
+            case ".": folder = DotFolder(addr = addr, name = name, parent = self)
+            case _: folder = Folder(addr = addr, name = name, parent = self)
+        return self.add(folder)
 
     def add(self, child: MemoryBuffer) -> MemoryBuffer:
         self._children.append(child)
@@ -74,3 +77,20 @@ class Folder(MemoryBuffer):
  
     def __repr__(self) -> str: return f"<Folder({self.name})>"
     def __str__(self) -> str: return f"Folder({self.name})"
+
+
+class DotFolder(Folder):
+    """
+    A folder that starts with a dot.
+    """
+    def __init__(
+            self,
+            addr: int,
+            name: str,
+            parent: MemoryBuffer = None
+            ):
+        super().__init__(
+            addr = addr,
+            name = name,
+            parent = parent
+        )

@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 rnd/
 termOS.state
+*.ignore
 # C extensions
 *.so
 

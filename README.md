@@ -2,9 +2,11 @@
 
 ## TODO
 
+- [ ] Implement `mv` command
+- [ ] Implement `addr` command
 - [ ] Implement `cp` command
-- [ ] Implement DotFolders
-- [ ] Recursive tree using `rich`
+- [ ] Implement `jmp` command
+- [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
 
 - [x] Change folder architecture
 - [x] Override keyoboardinterrupt
@@ -13,6 +15,7 @@
   - [x] Implement `display` for system
   - [x] Implement log in system
 
+- [X] Implement DotFolders
 - [x] Implement option parsing & handling
 - [x] Break down `shell` into smaller components i.e. `shell`, `shellCommands` (bin, interfaces, shell.exec) that can be "attached"
 - [x] Implement `fetch` in `shell`

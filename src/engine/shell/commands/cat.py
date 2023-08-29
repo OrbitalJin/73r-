@@ -1,5 +1,5 @@
 from engine.interfaces.command import Command
-from engine.core.file import File
+from engine.core.file import File, DotFile
 from typing import Optional
 
 class cat(Command):
@@ -17,5 +17,5 @@ class cat(Command):
         if not args: return self.sys.display.warning("No file name specified.")
         name: str = args.get(0)
         file: File = self.sys.disk.current.find(name = name)
-        if not file or not isinstance(file, File): return print(f"File not found: {name}")
+        if not file or not isinstance(file, File | DotFile): return print(f"File not found: {name}")
         self.sys.display.print(file.content)
