@@ -2,6 +2,7 @@
 class MemoryBuffer:
     def __init__(self, addr: int, name: str = None, parent: "MemoryBuffer" = None):
         self._addr: int = addr
+        self._hex_addr: str = f"0x{addr:02x}"
         self._name: str | None = name
         self._parent: MemoryBuffer | None = None
         self._type: str = "raw"
@@ -17,6 +18,9 @@ class MemoryBuffer:
     def addr(self) -> int: return self._addr
     @addr.setter
     def addr(self, addr: int) -> None: self._addr = addr
+
+    @property
+    def hex_addr(self) -> str: return self._hex_addr
 
     @property
     def parent(self) -> "MemoryBuffer": return self._parent

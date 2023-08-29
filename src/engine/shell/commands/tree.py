@@ -19,6 +19,7 @@ class tree(Command):
 
         self._tree(self.sys.disk.current, depth = 0)
 
+    # TODO: Ignore dotfiles & dotfolders
     def _tree(self, dir: Folder, depth: int = 0, last: bool = True) -> None:
         indent: str = "    " * depth + "├── "
         indent_final : str = "    " * depth + "└── "

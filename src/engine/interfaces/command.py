@@ -1,13 +1,19 @@
+# To prevent running into circular imports when annotating, we use the __future__ module
+from __future__ import annotations
+import engine.system as sys
+import engine.shell.shell as sh
+
 from typing import Optional
 
 class Command:
-    def __init__(self, shell) -> None:
-        self.shell = shell
-        self.sys = shell.sys
-        self.name: str = self.__class__.__name__.lower()
+    def __init__(self, shell: sh.Shell) -> None:
+        self.shell: sh.Shell = shell
+        self.sys  : sys.System = shell.sys
+        self.name : str = self.__class__.__name__.lower()
+        
         self.description: str = self._get_description()
-        self.usage: str
-        self.options: Optional[dict]
+        self.usage      : str
+        self.options    : Optional[dict]
 
     def execute(
             self,

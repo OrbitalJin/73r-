@@ -14,7 +14,7 @@ classDiagram
         saveState()
         loadState()
     }
-    note for System "The system is the main entry point of the program"
+    note for System "The system is the main entry point of the OS"
 
     class Shell {
         Commands
@@ -37,7 +37,7 @@ classDiagram
         find(), tree()
         fetch()
     }
-    note for Commands "The commands are the main functionality of the Operating System"
+    note for Commands "The commands are the main functionality of the OS"
 
     class IOController {
         Display
@@ -111,17 +111,16 @@ classDiagram
 
 ## IOController
 
+- [x] Implement `IOController` for system
 - [x] Implement `Collector` for system
 - [x] Implement `display` for system
 
 ## TODO
 
-- [x] Implement `IOController` for system
-- [ ] Implement `cp` command
-- [ ] Implement `addr` command
 - [ ] Implement `jmp` command
 - [ ] Implement `cp` command
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
+- [x] Implement `addr` command
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)
 - [x] Change folder architecture

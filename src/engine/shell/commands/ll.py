@@ -20,7 +20,7 @@ class ll(Command):
                 "{parent}\t{addr}\t{type}\t{name}".format(
                     parent = item.parent.name if item.parent else "/",
                     type = item.type,
-                    addr = item.addr,
+                    addr = item.hex_addr,
                     name = item.name,
             ))
         

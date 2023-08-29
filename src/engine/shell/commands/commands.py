@@ -1,4 +1,5 @@
 from engine.shell.commands.fetch import fetch
+from engine.shell.commands.addr import addr
 from engine.shell.commands.tree import tree
 from engine.shell.commands.find import find
 from engine.shell.commands.edit import edit
@@ -17,6 +18,7 @@ class Commands:
         self.tree = tree(shell)
         self.find = find(shell)
         self.edit = edit(shell)
+        self.addr = addr(shell)
         self.cat = cat(shell)
         self.rm = rm(shell)
         self.ls = ls(shell)
