@@ -3,6 +3,7 @@ from system.sh.commands.addr import addr
 from system.sh.commands.tree import tree
 from system.sh.commands.find import find
 from system.sh.commands.edit import edit
+from system.sh.commands.del_ import del_
 from system.sh.commands.cat import cat
 from system.sh.commands.jmp import jmp
 from system.sh.commands.ls import ls
@@ -32,6 +33,7 @@ class Commands:
         self.mv = mv(shell)
         self.tp = tp(shell)
         self.cp = cp(shell)
+        self.del_ = del_(shell)
 
     def cog(self) -> dict: return self._generateCogData()
     def _generateCogData(self) -> dict:
@@ -41,7 +43,7 @@ class Commands:
         data = {}
         for cmd, obj in inspect.getmembers(self):
             if not cmd.startswith("_") and cmd != "cog":
-                data[cmd] = {
+                data[obj.name] = {
                     "func": obj.execute,
                     "desc": obj.description,
                     "usage": obj.usage,

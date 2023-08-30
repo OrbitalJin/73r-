@@ -104,7 +104,8 @@ classDiagram
 
 ## Shell
 
-- [ ] Implement `cp` command (_Not thoroughly tested_)
+- [x] Implement `del` command (_Not thoroughly tested_)
+- [x] Implement `cp` command (_Not thoroughly tested_)
 - [x] Implement `tp` command
 - [x] Implement `jmp` command
 - [x] Implement `addr` command
@@ -137,13 +138,10 @@ classDiagram
 - [x] Implement `Collector` for system
 - [x] Implement `display` for system
 
-## TODO
+# TODO
 
-- [ ] Implement `del` command: Delete a buffer from memory using it's address
 - [ ] Implement user setup
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
-- [x] HOT FIX: `mv` command, check if file or folder exists in destination
-- [x] HOT FIX: `cp` command, check if file or folder exists in destination
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)
 - [x] Change folder architecture
@@ -157,10 +155,15 @@ classDiagram
 - [x] Disable `find` on dotfiles
 - [x] DotFile & File counting
 - [x] Guard statement for Null args
+- [x] Unknown command None bug
+- [x] Refactoring shell commands implementations
+- [x] Implement command line arguments parsing for shell commands
+
+# Hot Fixes
+
+- [x] HOT FIX: `mv` command, check if file or folder exists in destination
+- [x] HOT FIX: `cp` command, check if file or folder exists in destination
 - [x] HOT FIX: cd to root directory
 - [x] HOT FIX: cat not working on Files
 - [x] HOT FIX: edit not working on Files
 - [x] HOT FIX: rm not working on Files
-- [x] Unknown command None bug
-- [x] Refactoring shell commands implementations
-- [x] Implement command line arguments parsing for shell commands

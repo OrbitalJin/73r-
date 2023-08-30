@@ -34,6 +34,6 @@ class jmp(Command):
 
         if not target: return self.sys.io.display.warning("Address not found.")
         if not isinstance(target, Folder): return self.sys.io.display.warning("Cannot jump to a file.") 
-        self.sys.io.display.print(f"Jumped to address {target.hex_addr}.")   
         self.sys.fs.disk.current = target
+        self.sys.io.display.print(f"Jumped to address {target.hex_addr}.")   
         return target
