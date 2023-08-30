@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.core.folder import Folder
 from typing import Optional
@@ -6,7 +9,7 @@ class jmp(Command):
     """
     Jump to a specific address in virtual memory.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "jmp <addr>"
         self.options = {
@@ -27,7 +30,7 @@ class jmp(Command):
         target = self.shell.commands.find._rfindAddr(
             folder = self.sys.fs.disk.root,
             addr = addr
-        ) if addr != 0 else self.sys.fs.disk.root
+        )
 
         if not target: return self.sys.io.display.warning("Address not found.")
         if not isinstance(target, Folder): return self.sys.io.display.warning("Cannot jump to a file.") 

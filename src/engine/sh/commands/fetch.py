@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from typing import Optional
 import platform, psutil
@@ -6,7 +9,7 @@ class fetch(Command):
     """
     Display system information.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.name = "fetch"
         self.usage = "fetch"

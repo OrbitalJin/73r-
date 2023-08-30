@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.core.file import File
 from typing import Optional
@@ -6,7 +9,7 @@ class edit(Command):
     """
     Edit the content of a file.
     """
-    def __init__(self, shell):
+    def __init__(self, shell: sh.Shell):
         super().__init__(shell)
         self.usage = 'edit <file>'
         self.options = {"-h": "Display the help message."}

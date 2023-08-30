@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.core.memory_buffer import MemoryBuffer
 from engine.core.folder import Folder, DotFolder
 from engine.core.file import File, DotFile
@@ -9,7 +12,7 @@ class find(Command):
     """
     Find a file or folder by name within a directory.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.name = "find"
         self.usage = "find [options] [path]"

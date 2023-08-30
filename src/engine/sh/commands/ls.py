@@ -1,14 +1,17 @@
-from typing import Optional
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.sh.console import console
 from engine.core import Folder
 from engine.core import File
+from typing import Optional
 
 class ls(Command):
     """
     List files and folders in the current directory.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "ls [options] [path]"
         self.options = {"-h": "Display the help message."}

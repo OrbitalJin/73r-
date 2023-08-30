@@ -2,7 +2,7 @@
 
 ## Arch
 
-Architectural overview of the project using mermaid class diagram
+Architectural overview of the project using mermaid class diagrams
 
 ```mermaid
 classDiagram
@@ -104,6 +104,7 @@ classDiagram
 
 ## Shell
 
+- [x] Implement `tp` command
 - [x] Implement `jmp` command
 - [x] Implement `addr` command
 - [x] Implement `mv` command
@@ -137,8 +138,6 @@ classDiagram
 
 ## TODO
 
-- [ ] Implement `tp` command: Teleport from one memory buffer from one address to another
-- [ ] Implement nested `cd` command (path)
 - [ ] Implement `cp` command
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
 - [x] Implement option parsing & handling

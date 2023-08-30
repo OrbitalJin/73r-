@@ -1,14 +1,18 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.core.memory_buffer import MemoryBuffer
 from engine.interfaces.command import Command
 from engine.core.folder import Folder
 from engine.core.file import File
 from typing import Optional
 
+
 class rm(Command):
     """
     Remove a file or folder.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "rm <file>"
         self.options = {

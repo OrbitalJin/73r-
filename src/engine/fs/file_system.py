@@ -48,3 +48,6 @@ class FileSystem:
     def disk(self) -> Disk | None: return self._disk
     @disk.setter
     def disk(self, other: Disk): self._disk = other
+
+    @property
+    def sys(self): return self._sys

@@ -9,6 +9,7 @@ from engine.sh.commands.ls import ls
 from engine.sh.commands.ll import ll
 from engine.sh.commands.rm import rm
 from engine.sh.commands.mv import mv
+from engine.sh.commands.tp import tp
 import inspect
 
 class Commands:
@@ -26,6 +27,7 @@ class Commands:
         self.ls = ls(shell)
         self.ll = ll(shell)
         self.mv = mv(shell)
+        self.tp = tp(shell)
 
     def cog(self) -> dict: return self._generateCogData()
     def _generateCogData(self) -> dict:

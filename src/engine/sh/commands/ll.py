@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.sh.console import console
 from typing import Optional
@@ -6,7 +9,7 @@ class ll(Command):
     """
     List the contents of the current directory with details.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "ll [options] [path]"
         self.options = {"-h": "Display the help message."}

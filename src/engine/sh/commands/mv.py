@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.core.folder import Folder, DotFolder
 from typing import Optional
@@ -6,7 +9,7 @@ class mv(Command):
     """
     Move a file or folder.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "mv <src> <dst>"
         self.options = {"-h": "Display the help message."}

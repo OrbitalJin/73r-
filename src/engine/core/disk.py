@@ -7,7 +7,7 @@ from engine.core.file import File
 class Disk(Folder):
     def __init__(self, name: str, sys: sys.System = None):
         super().__init__(addr = 0, name = "/", parent = None)
-        self._sys: sys.System = sys
+        self._fs: sys.System = sys
         self._name: str = name
         self._root: Folder = self
         self._children: list[File | Folder] = []

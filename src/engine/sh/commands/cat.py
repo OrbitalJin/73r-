@@ -1,3 +1,6 @@
+from __future__ import annotations
+import engine.sh.shell as sh
+
 from engine.interfaces.command import Command
 from engine.core.file import File, DotFile
 from typing import Optional
@@ -6,7 +9,7 @@ class cat(Command):
     """
     Display the content of a file.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "cat <file>"
         self.options = None

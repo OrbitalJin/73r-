@@ -1,13 +1,13 @@
 from __future__ import annotations
-import engine.system as sys
-from engine.interfaces.command import Command
+import engine.sh.shell as sh
 
+from engine.interfaces.command import Command
 
 class addr(Command):
     """
     Display the address of the current directory.
     """
-    def __init__(self, shell) -> None:
+    def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
         self.usage = "addr"
         self.options = {
