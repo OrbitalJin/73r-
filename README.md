@@ -117,9 +117,10 @@ classDiagram
 
 ## TODO
 
-- [ ] Implement `jmp` command
+- [ ] Implement nested `cd` command (path)
 - [ ] Implement `cp` command
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
+- [x] Implement `jmp` command
 - [x] Implement `addr` command
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)

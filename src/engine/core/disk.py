@@ -1,11 +1,15 @@
+from __future__ import annotations
+import engine.system as sys
+
 from engine.core.folder import Folder
 from engine.core.file import File
 
 class Disk(Folder):
-    def __init__(self, name: str, sys = None):
+    def __init__(self, name: str, sys: sys.System = None):
         super().__init__(addr = 0, name = "/", parent = None)
-        self._sys = sys
+        self._sys: sys.System = sys
         self._name: str = name
+        self._root: Folder = self
         self._children: list[File | Folder] = []
         self._current: Folder | None = self
         self._currentPath: str = "/"
@@ -24,6 +28,9 @@ class Disk(Folder):
     def current(self) -> Folder | None: return self._current
     @current.setter
     def current(self, current: Folder | None) -> None: self._current = current
+
+    @property
+    def root(self) -> Folder: return self._root
 
     @property
     def sys(self): return self._sys

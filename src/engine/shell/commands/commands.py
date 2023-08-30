@@ -4,6 +4,7 @@ from engine.shell.commands.tree import tree
 from engine.shell.commands.find import find
 from engine.shell.commands.edit import edit
 from engine.shell.commands.cat import cat
+from engine.shell.commands.jmp import jmp
 from engine.shell.commands.ls import ls
 from engine.shell.commands.ll import ll
 from engine.shell.commands.rm import rm
@@ -20,6 +21,7 @@ class Commands:
         self.edit = edit(shell)
         self.addr = addr(shell)
         self.cat = cat(shell)
+        self.jmp = jmp(shell)
         self.rm = rm(shell)
         self.ls = ls(shell)
         self.ll = ll(shell)

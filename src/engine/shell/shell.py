@@ -109,31 +109,30 @@ class Shell:
     
 
 
-# Rich Tree
 # def _tree(self, folder: Folder, depth: int = 0) -> None:
-#     """
-#     Helper Function for tree.
-#     """
-#     if isinstance(dir, File): return
-#     tree: Tree = Tree(folder.name)
-
-#     for item in folder.list():
-#         if isinstance(item, Folder): self._branch(tree, item, depth + 1)
-#         elif isinstance(item, File): tree.add(item.name)
-
-#     self.sys.io.display.print(tree)
-
+    # """
+    # Helper Function for tree.
+    # """
+    # if isinstance(folder, File): return
+    # tree: Tree = Tree(f"[bold blue]{folder.name}[/]")
+# 
+    # for item in folder.list():
+        # if isinstance(item, Folder): self._branch(tree, item, depth + 1)
+        # elif isinstance(item, File): tree.add(f"[green]{item.name}[/]")
+# 
+    # self.sys.io.display.print(tree)
+# 
 # def _branch(self, tree: Tree, folder: Folder, depth: int) -> None:
-#     """
-#     Helper Function for tree.
-#     """
-#     branch: Tree = Tree(folder.name)
-
-#     for item in folder.list():
-#         if isinstance(item, Folder): self._branch(branch, item, depth + 1)
-#         elif isinstance(item, File): branch.add(item.name)
-
-#     tree.add(branch)
+    # """
+    # Helper Function for tree.
+    # """
+    # branch: Tree = Tree(f"[bold blue]{folder.name}[/]")
+# 
+    # for item in folder.list():
+        # if isinstance(item, Folder): self._branch(branch, item, depth + 1)
+        # elif isinstance(item, File): branch.add(f"[green]{item.name}[/]")
+# 
+    # tree.add(branch)
 
 
 #def _tree(self, dir: Folder, depth: int = 0) -> None:

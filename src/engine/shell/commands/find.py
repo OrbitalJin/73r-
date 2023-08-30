@@ -7,7 +7,7 @@ from typing import Optional
 
 class find(Command):
     """
-    Find a file or folder by name in the current folderectory.
+    Find a file or folder by name within a directory.
     """
     def __init__(self, shell) -> None:
         super().__init__(shell)
@@ -15,7 +15,7 @@ class find(Command):
         self.usage = "find [options] [path]"
         self.options = {
             "-h": "Display the help message.",
-            "-r": "Recursively find a file or folder by name starting from the current folderectory."
+            "-r": "Recursively find a file or folder by name starting from the current directory."
         }
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
@@ -40,7 +40,7 @@ class find(Command):
 
     def _find(self, folder: Folder, name: str) -> File | Folder | None:
         """
-        Helper Function for find. Find a file or folder by name from current folderectory.
+        Helper Function for find. Find a file or folder by name from current directory.
         """
         for item in folder.list():
             if not isinstance(item, DotFile | DotFolder):
@@ -49,7 +49,7 @@ class find(Command):
 
     def _rfind(self, folder: MemoryBuffer, name: str) -> File | Folder | None:
         """
-        Helper Function for find. Recursively find a file or folder by name from a specified folderectory.
+        Helper Function for find. Recursively find a file or folder by name from a specified directory.
         """
         if isinstance(folder, DotFolder | DotFile): return None
         if folder.name == name: return folder
@@ -57,5 +57,27 @@ class find(Command):
         if not isinstance(folder, File):
             for item in folder.list():
                 result = self._rfind(item, name)
+                if result: return result
+        return None
+    
+    def _findAddr(self, folder: Folder, addr: int) -> File | Folder | None:
+        """
+        Helper Function for find. Find a file or folder by address from current directory.
+        """
+        for item in folder.list():
+            if not isinstance(item, DotFile | DotFolder):
+                if item.addr == addr: return item
+        return None
+    
+    def _rfindAddr(self, folder: MemoryBuffer, addr: int) -> File | Folder | None:
+        """
+        Helper Function for find. Recursively find a file or folder by address from a specified directory.
+        """
+        if isinstance(folder, DotFolder | DotFile): return None
+        if folder.addr == addr: return folder
+        
+        if not isinstance(folder, File):
+            for item in folder.list():
+                result = self._rfindAddr(item, addr)
                 if result: return result
         return None

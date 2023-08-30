@@ -14,7 +14,7 @@ class ls(Command):
         self.options = {"-h": "Display the help message."}
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
-        if options and "-h" in options: return self.sys.io.display.print(self.help())
+        if options and "-h" in options: return self.sys.display.print(self.help())
         if self.shell.sys.disk.current.count() == 0: return console.print("[italic]Empty")
 
         for item in self.shell.sys.disk.current.list():

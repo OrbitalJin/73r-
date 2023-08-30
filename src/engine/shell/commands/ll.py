@@ -13,7 +13,7 @@ class ll(Command):
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
         if options and "-h" in options: return self.sys.io.display.print(self.help())
-
+        if self.sys.disk.current.count() == 0: return console.print("[italic]Empty")
         console.print("[bold blue]Parent\tAddr\tType\tName")
         for item in self.sys.disk.current.list():
             self.sys.io.display.print(
