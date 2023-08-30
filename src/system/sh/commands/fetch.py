@@ -1,7 +1,7 @@
 from __future__ import annotations
 import engine.sh.shell as sh
 
-from engine.interfaces.command import Command
+from engine.core.interfaces.command import Command
 from typing import Optional
 import platform, psutil
 

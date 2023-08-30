@@ -139,6 +139,7 @@ classDiagram
 ## TODO
 
 - [ ] Implement `cp` command
+- [ ] Implement user setup
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)

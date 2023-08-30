@@ -2,7 +2,7 @@
 from __future__ import annotations
 import engine.system as sys
 
-from engine.interfaces.structs import colors
+from engine.core.interfaces.structs import colors
 from typing import Any
 import readline
 

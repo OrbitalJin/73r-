@@ -1,10 +1,10 @@
 from __future__ import annotations
-import engine.sh.shell as sh
+import system.sh.shell as sh
 
-from engine.core.memory_buffer import MemoryBuffer
-from engine.interfaces.command import Command
-from engine.core.folder import Folder
-from engine.core.file import File
+from system.core.memory_buffer import MemoryBuffer
+from system.core.interfaces.command import Command
+from system.core.folder import Folder
+from system.core.file import File
 from typing import Optional
 
 

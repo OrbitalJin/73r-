@@ -5,7 +5,7 @@ from engine.core.memory_buffer import MemoryBuffer
 from engine.core.folder import Folder, DotFolder
 from engine.core.file import File, DotFile
 
-from engine.interfaces.command import Command
+from engine.core.interfaces.command import Command
 from typing import Optional
 
 class find(Command):

@@ -4,7 +4,7 @@ import engine.sh.shell as sh
 from engine.core.folder import Folder, DotFolder
 from engine.core.file import File
 
-from engine.interfaces.command import Command
+from engine.core.interfaces.command import Command
 from typing import Optional
 
 class tp(Command):

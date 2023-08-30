@@ -1,4 +1,4 @@
-from engine.interfaces.command import Command
+from engine.core.interfaces.command import Command
 from engine.core.folder import Folder
 from engine.core.file import File
 from typing import Optional
