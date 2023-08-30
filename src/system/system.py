@@ -1,12 +1,12 @@
 from system.core.memory_buffer import MemoryBuffer
 from system.core.disk import Disk
 
-
 from system.io.io_controller import IOController
 from system.fs.file_system import FileSystem
-from system.sh.shell import Shell
 
 from system.sh.console import console
+from system.sh.shell import Shell
+
 import pickle, time, os
 
 class System(MemoryBuffer):

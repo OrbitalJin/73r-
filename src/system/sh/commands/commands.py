@@ -10,12 +10,15 @@ from system.sh.commands.ll import ll
 from system.sh.commands.rm import rm
 from system.sh.commands.mv import mv
 from system.sh.commands.tp import tp
+from system.sh.commands.cp import cp
 import inspect
 
 class Commands:
+    """
+    The commands class is a collection of all commands available in the shell.
+    """
     def __init__(self, shell) -> None:
         self._generateCogData()
-
         self.fetch = fetch(shell)
         self.tree = tree(shell)
         self.find = find(shell)
@@ -28,6 +31,7 @@ class Commands:
         self.ll = ll(shell)
         self.mv = mv(shell)
         self.tp = tp(shell)
+        self.cp = cp(shell)
 
     def cog(self) -> dict: return self._generateCogData()
     def _generateCogData(self) -> dict:
@@ -44,3 +48,6 @@ class Commands:
                     "options": obj.options
                 }
         return data
+    
+    def __str__(self) -> str: return f"<Commands: {len(self.cog())}>"
+    def __repr__(self) -> str: return self.__str__()

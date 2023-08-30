@@ -104,6 +104,7 @@ classDiagram
 
 ## Shell
 
+- [ ] Implement `cp` command (_Not thoroughly tested_)
 - [x] Implement `tp` command
 - [x] Implement `jmp` command
 - [x] Implement `addr` command
@@ -138,9 +139,11 @@ classDiagram
 
 ## TODO
 
-- [ ] Implement `cp` command
+- [ ] Fix `mv` command, check if file or folder exists in destination
+- [ ] Implement `del` command: Delete a buffer from memory using it's address
 - [ ] Implement user setup
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
+- [x] Fix `cp` command, check if file or folder exists in destination
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)
 - [x] Change folder architecture
