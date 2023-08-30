@@ -43,6 +43,7 @@ class System(MemoryBuffer):
         The main loop of the system.
         """
         self.shell.clear()
+        self.shell.commands.fetch.execute(args = None, options = None)
         try: self._loop()
         except KeyboardInterrupt: print("\n"); self.shell.exit()
     
