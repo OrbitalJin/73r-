@@ -1,9 +1,9 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.io.display import Display
-from engine.io.collector import Collector
+from system.io.display import Display
+from system.io.collector import Collector
 
 class IOController:
     def __init__(self, sys: sys.System):

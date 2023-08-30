@@ -1,8 +1,8 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.core.interfaces.structs import colors
+from system.core.interfaces.structs import colors
 from typing import Any
 import readline
 

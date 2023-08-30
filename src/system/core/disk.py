@@ -1,8 +1,8 @@
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.core.folder import Folder
-from engine.core.file import File
+from system.core.folder import Folder
+from system.core.file import File
 
 class Disk(Folder):
     def __init__(self, name: str, sys: sys.System = None):

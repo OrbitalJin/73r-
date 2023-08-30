@@ -1,8 +1,8 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.sh.console import console
+from system.sh.console import console
 
 class Display:
     """

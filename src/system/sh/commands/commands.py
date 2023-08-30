@@ -1,15 +1,15 @@
-from engine.sh.commands.fetch import fetch
-from engine.sh.commands.addr import addr
-from engine.sh.commands.tree import tree
-from engine.sh.commands.find import find
-from engine.sh.commands.edit import edit
-from engine.sh.commands.cat import cat
-from engine.sh.commands.jmp import jmp
-from engine.sh.commands.ls import ls
-from engine.sh.commands.ll import ll
-from engine.sh.commands.rm import rm
-from engine.sh.commands.mv import mv
-from engine.sh.commands.tp import tp
+from system.sh.commands.fetch import fetch
+from system.sh.commands.addr import addr
+from system.sh.commands.tree import tree
+from system.sh.commands.find import find
+from system.sh.commands.edit import edit
+from system.sh.commands.cat import cat
+from system.sh.commands.jmp import jmp
+from system.sh.commands.ls import ls
+from system.sh.commands.ll import ll
+from system.sh.commands.rm import rm
+from system.sh.commands.mv import mv
+from system.sh.commands.tp import tp
 import inspect
 
 class Commands:

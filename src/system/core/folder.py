@@ -1,5 +1,5 @@
-from engine.core.memory_buffer import MemoryBuffer
-from engine.core.file import File, DotFile
+from system.core.memory_buffer import MemoryBuffer
+from system.core.file import File, DotFile
 
 class Folder(MemoryBuffer):
     """

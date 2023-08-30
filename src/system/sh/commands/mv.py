@@ -1,8 +1,8 @@
 from __future__ import annotations
-import engine.sh.shell as sh
+import system.sh.shell as sh
 
-from engine.core.interfaces.command import Command
-from engine.core.folder import Folder, DotFolder
+from system.core.interfaces.command import Command
+from system.core.folder import Folder, DotFolder
 from typing import Optional
 
 class mv(Command):

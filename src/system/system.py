@@ -1,12 +1,12 @@
-from engine.core.memory_buffer import MemoryBuffer
-from engine.core.disk import Disk
+from system.core.memory_buffer import MemoryBuffer
+from system.core.disk import Disk
 
 
-from engine.io.io_controller import IOController
-from engine.fs.file_system import FileSystem
-from engine.sh.shell import Shell
+from system.io.io_controller import IOController
+from system.fs.file_system import FileSystem
+from system.sh.shell import Shell
 
-from engine.sh.console import console
+from system.sh.console import console
 import pickle, time, os
 
 class System(MemoryBuffer):

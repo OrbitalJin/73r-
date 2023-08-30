@@ -1,4 +1,4 @@
-from engine.core.memory_buffer import MemoryBuffer
+from system.core.memory_buffer import MemoryBuffer
 
 class File(MemoryBuffer):
     """

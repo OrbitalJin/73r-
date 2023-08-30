@@ -1,8 +1,8 @@
 from __future__ import annotations
-import engine.sh.shell as sh
+import system.sh.shell as sh
 
-from engine.core.interfaces.command import Command
-from engine.core.file import File, DotFile
+from system.core.interfaces.command import Command
+from system.core.file import File, DotFile
 from typing import Optional
 
 class cat(Command):

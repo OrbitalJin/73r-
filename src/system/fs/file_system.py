@@ -1,7 +1,7 @@
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.core.disk import Disk
+from system.core.disk import Disk
 
 class FileSystem:
     def __init__(self, sys: sys.System):

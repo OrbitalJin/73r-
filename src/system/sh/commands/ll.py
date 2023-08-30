@@ -1,8 +1,8 @@
 from __future__ import annotations
-import engine.sh.shell as sh
+import system.sh.shell as sh
 
-from engine.core.interfaces.command import Command
-from engine.sh.console import console
+from system.core.interfaces.command import Command
+from system.sh.console import console
 from typing import Optional
 
 class ll(Command):

@@ -1,9 +1,9 @@
 # To prevent running into circular imports, we use the __future__ module
 from __future__ import annotations
-import engine.system as sys
+import system.system as sys
 
-from engine.sh.commands import Commands
-from engine.sh.console import console
+from system.sh.commands import Commands
+from system.sh.console import console
 import inspect, sys, os
 
 # TODO: Implement options for rm e.g rm -r for recursive removal

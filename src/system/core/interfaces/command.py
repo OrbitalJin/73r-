@@ -1,8 +1,8 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
 
-import engine.sh.shell as sh
-import engine.system as sys
+import system.sh.shell as sh
+import system.system as sys
 
 from typing import Optional
 
