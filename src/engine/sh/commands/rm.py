@@ -21,12 +21,12 @@ class rm(Command):
 
         if not args: return self.sys.io.display.warning("No file or folder specified. Use -h for help.")
         name: str = args.get(0)
-        target = self.sys.disk.current.find(name = name)
+        target = self.sys.fs.disk.current.find(name = name)
         if not target: return self.sys.io.display.error(f"File or folder not found: {name}")
 
         isRecursive: bool = "-r" in options
         if isRecursive: self._rrm(target)
-        else: self.sys.disk.current.remove(name = name)
+        else: self.sys.fs.disk.current.remove(name = name)
 
     def _rm(self, target: Folder | File) -> MemoryBuffer:
         """

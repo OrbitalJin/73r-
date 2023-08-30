@@ -25,12 +25,12 @@ class jmp(Command):
 
     def _jpm(self, addr: int) -> Folder | None:
         target = self.shell.commands.find._rfindAddr(
-            folder = self.sys.disk.root,
+            folder = self.sys.fs.disk.root,
             addr = addr
-        ) if addr != 0 else self.sys.disk.root
+        ) if addr != 0 else self.sys.fs.disk.root
 
         if not target: return self.sys.io.display.warning("Address not found.")
         if not isinstance(target, Folder): return self.sys.io.display.warning("Cannot jump to a file.") 
         self.sys.io.display.print(f"Jumped to address {target.hex_addr}.")   
-        self.sys.disk.current = target
+        self.sys.fs.disk.current = target
         return target

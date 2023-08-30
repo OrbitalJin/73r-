@@ -8,13 +8,23 @@ Architectural overview of the project using mermaid class diagram
 classDiagram
     class System {
         IOController
+        FileSystem
         Shell
         boot()
-        mainLoopEvent()
+        malloc()
+        loop()
         saveState()
         loadState()
     }
-    note for System "The system is the main entry point of the OS"
+
+    class FileSystem {
+        disk
+        disks
+        add()
+        eject()
+        mount()
+        unmount()
+    }
 
     class Shell {
         Commands
@@ -27,7 +37,6 @@ classDiagram
         mkdir()
         history()
     }
-    note for Shell "The shell is the main interface of the program"
 
     class Commands {
         CogData
@@ -35,20 +44,19 @@ classDiagram
         cat(), edit()
         rm(), mv()
         find(), tree()
+        addr(), jmp()
         fetch()
     }
-    note for Commands "The commands are the main functionality of the OS"
 
     class IOController {
         Display
         Collector
-        exists()
-        isFile()
-        isFolder()
-        isDotFile()
-        isDotFolder()
+        *exists()
+        *isFile()
+        *isFolder()
+        *isDotFile()
+        *isDotFolder()
     }
-    note for IOController "Planned"
 
     class Collector {
         readCmd()
@@ -57,14 +65,12 @@ classDiagram
         parseCmd()
         parseOptions()
     }
-    note for Collector "The collector is responsible for collecting user input"
 
     class Display {
         print(), printLn()
         error(), warning()
         success(), info()
     }
-    note for Display "The display is responsible for displaying information to the user"
 
     class Core {
         MemoryBuffer
@@ -74,11 +80,11 @@ classDiagram
         DotFolders
         DotFiles
     }
-    note for Core "The core is responsible for the data structure of the Operating System"
 
     System <|-- Shell
     System <|-- IOController
-    System <|-- Core
+    System <|-- FileSystem
+    System <|--> Core
     Shell <|-- Commands
     IOController <|-- Collector
     IOController <|-- Display
@@ -98,16 +104,30 @@ classDiagram
 
 ## Shell
 
-- [x] Implement `fetch`
+- [x] Implement `jmp` command
+- [x] Implement `addr` command
 - [x] Implement `mv` command
-- [x] Implement `history` command
+- [x] Implement `fetch`
+- [x] Implement `rm` command
 - [x] Implement `find` command
+- [x] Implement `history` command
+- [x] Implement `cat` command
+- [x] Implement `edit` command
+- [x] Implement `cd` command
+- [x] Implement `tree` command
+- [x] Implement `ll` command
+- [x] Implement `ls` command
+- [x] Implement `mkdir` command
+- [x] Implement `touch` command
+- [x] Implement `clear` command
+- [x] Implement `exit` command
 
 ## System
 
 - [x] Implement `io` for system
 - [x] Implement state saving & loading
 - [x] Override KeyboardInterrupt
+- [x] Migrate from `disk` to `fs` architecture
 
 ## IOController
 
@@ -117,11 +137,10 @@ classDiagram
 
 ## TODO
 
+- [ ] Implement `tp` command: Teleport from one memory buffer from one address to another
 - [ ] Implement nested `cd` command (path)
 - [ ] Implement `cp` command
 - [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
-- [x] Implement `jmp` command
-- [x] Implement `addr` command
 - [x] Implement option parsing & handling
 - [x] Handle args within the imlementation of each method (within the controller object)
 - [x] Change folder architecture

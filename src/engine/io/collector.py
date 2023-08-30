@@ -25,7 +25,7 @@ class Collector:
                 green = colors.OKGREEN,
                 blue  = colors.OKCYAN,
                 end   = colors.ENDC,
-                path  = self.sys.disk.current.path(),
+                path  = self.sys.fs.disk.current.path(),
             ))
         return (self.cmd, self.args, self.options)
 

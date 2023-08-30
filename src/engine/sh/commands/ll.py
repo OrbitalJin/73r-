@@ -1,5 +1,5 @@
 from engine.interfaces.command import Command
-from engine.shell.console import console
+from engine.sh.console import console
 from typing import Optional
 
 class ll(Command):
@@ -13,9 +13,9 @@ class ll(Command):
     
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
         if options and "-h" in options: return self.sys.io.display.print(self.help())
-        if self.sys.disk.current.count() == 0: return console.print("[italic]Empty")
+        if self.sys.fs.disk.current.count() == 0: return console.print("[italic]Empty")
         console.print("[bold blue]Parent\tAddr\tType\tName")
-        for item in self.sys.disk.current.list():
+        for item in self.sys.fs.disk.current.list():
             self.sys.io.display.print(
                 "{parent}\t{addr}\t{type}\t{name}".format(
                     parent = item.parent.name if item.parent else "/",
@@ -26,7 +26,7 @@ class ll(Command):
         
         self.sys.io.display.print(
             "\n{fC} file(s), {dfC} .file(s), {dirC} folder(s).".format(
-                fC = self.sys.disk.current.fileCount(),
-                dfC = self.sys.disk.current.dotFileCount(),
-                dirC = self.sys.disk.current.folderCount()
+                fC = self.sys.fs.disk.current.fileCount(),
+                dfC = self.sys.fs.disk.current.dotFileCount(),
+                dirC = self.sys.fs.disk.current.folderCount()
         ))

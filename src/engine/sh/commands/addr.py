@@ -18,5 +18,5 @@ class addr(Command):
         if options and "-h" in options: return self.sys.io.display.print(self.help())
 
 
-        addr: int = self.sys.disk.current.hex_addr
+        addr: int = self.sys.fs.disk.current.hex_addr
         self.sys.io.display.print(addr)

@@ -3,4 +3,4 @@ from engine.core.folder import Folder, DotFolder
 from engine.core.file import File, DotFile
 from engine.core.disk import Disk
 
-from engine.shell.console import console
+from engine.sh.console import console

@@ -25,8 +25,8 @@ class find(Command):
         name: str = args.get(0)
         isRecursive: bool = "-r" in options
 
-        if isRecursive: result = self._rfind(self.sys.disk.current, name)
-        else: result = self._find(self.sys.disk.current, name)
+        if isRecursive: result = self._rfind(self.sys.fs.disk.current, name)
+        else: result = self._find(self.sys.fs.disk.current, name)
 
         if not result: return self.sys.io.display.error(f"File or folder not found: {name}")
 
@@ -34,7 +34,7 @@ class find(Command):
         self.sys.io.display.print(
             "{type}\t{addr}\t{path}".format(
                 type = result.type,
-                addr = result.addr,
+                addr = result.hex_addr,
                 path = result.path()
             ))
 

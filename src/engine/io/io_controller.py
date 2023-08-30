@@ -10,6 +10,7 @@ class IOController:
         self._display = Display(sys)
         self._collector = Collector(sys)
 
+
     @property
     def display(self) -> Display: return self._display
     @property

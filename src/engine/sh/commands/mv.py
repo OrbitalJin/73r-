@@ -18,11 +18,11 @@ class mv(Command):
         if len(args) < 2: return self.sys.io.display.warning("No destination specified.")
         src_, dest_ = args.get(0), args.get(1)
 
-        src = self.sys.disk.current.find(name = src_)
+        src = self.sys.fs.disk.current.find(name = src_)
         if not src: return self.sys.io.display.error(f"File or folder not found: {src_}")
         
-        if dest_ == "..": dest = self.sys.disk.current.parent
-        else: dest = self.sys.disk.current.find(name = dest_)
+        if dest_ == "..": dest = self.sys.fs.disk.current.parent
+        else: dest = self.sys.fs.disk.current.find(name = dest_)
         
         if not dest: return self.sys.io.display.error(f"Destination not found: {dest_}")
         if not isinstance(dest, Folder | DotFolder): return self.sys.io.display.error(f"Destination is not a folder: {dest_}")

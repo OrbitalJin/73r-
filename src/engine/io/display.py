@@ -2,7 +2,7 @@
 from __future__ import annotations
 import engine.system as sys
 
-from engine.shell.console import console
+from engine.sh.console import console
 
 class Display:
     """

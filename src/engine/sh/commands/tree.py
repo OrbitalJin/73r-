@@ -19,10 +19,10 @@ class tree(Command):
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
         if options and "-h" in options: return self.sys.io.display.print(self.help())
         if not args:
-            if options and "-a" in options: folder = self.sys.disk.root
-            else: folder = self.sys.disk.current
+            if options and "-a" in options: folder = self.sys.fs.disk.root
+            else: folder = self.sys.fs.disk.current
 
-        else: folder = self.sys.disk.current.find(name = args.get(0))
+        else: folder = self.sys.fs.disk.current.find(name = args.get(0))
         if not folder or not isinstance(folder, Folder): return self.sys.io.display.error(f"Folder not found: {args.get(0)}")
 
         self._tree(folder, depth = 0)

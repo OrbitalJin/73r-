@@ -16,7 +16,7 @@ class edit(Command):
 
         if not args: return self.sys.io.display.warning("No file name specified. Use -h for help")
         name: str = args.get(0)
-        file: File = self.sys.disk.current.find(name = name)
+        file: File = self.sys.fs.disk.current.find(name = name)
         if not file or not isinstance(file, File): return print(f"File not found: {name}")
         self.shell.clear()
         self.sys.io.display.editorHeader(filename = file.name)

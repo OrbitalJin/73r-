@@ -2,8 +2,8 @@
 from __future__ import annotations
 import engine.system as sys
 
-from engine.shell.commands import Commands
-from engine.shell.console import console
+from engine.sh.commands import Commands
+from engine.sh.console import console
 import inspect, sys, os
 
 # TODO: Implement options for rm e.g rm -r for recursive removal
@@ -22,15 +22,15 @@ class Shell:
         Change directory.
         """
         # if no args, go to root
-        if not args: self.sys.disk.current = self.sys.disk; return
+        if not args: self.sys.fs.disk.current = self.sys.fs.disk; return
         path: str = args.get(0)
-        self.sys.disk.navigate(path = path)
+        self.sys.fs.disk.navigate(path = path)
 
     def pwd(self, args: dict = None, options: dict = None) -> None:
         """
         Print the current directory's path.
         """
-        self.sys.io.display.info(self.sys.disk.current.path(), bold = True)
+        self.sys.io.display.info(self.sys.fs.disk.current.path(), bold = True)
 
     def mkdir(self, args: dict = None, options: dict = None) -> None:
         """
@@ -38,7 +38,7 @@ class Shell:
         """
         if not args: return self.sys.io.display.warning("No folder name specified.")
         name: str = args.get(0)
-        self.sys.disk.current.createFolder(name = name, addr = self.sys.malloc())
+        self.sys.fs.disk.current.createFolder(name = name, addr = self.sys.malloc())
 
     def touch(self, args: dict = None, options: dict = None) -> None:
         """
@@ -46,7 +46,7 @@ class Shell:
         """
         if not args: return self.sys.io.display.warning("No file name specified.")
         name: str = args.get(0)
-        self.sys.disk.current.createFile(name = name, addr = self.sys.malloc())
+        self.sys.fs.disk.current.createFile(name = name, addr = self.sys.malloc())
 
     def clear(self, args: dict = None, options: dict = None) -> None:
         """

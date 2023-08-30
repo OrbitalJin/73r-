@@ -2,10 +2,11 @@ from engine.core.memory_buffer import MemoryBuffer
 from engine.core.disk import Disk
 
 
-from engine.io.ioController import IOController
-from engine.shell.shell import Shell
+from engine.io.io_controller import IOController
+from engine.fs.file_system import FileSystem
+from engine.sh.shell import Shell
 
-from engine.shell.console import console
+from engine.sh.console import console
 import pickle, time, os
 
 class System(MemoryBuffer):
@@ -17,32 +18,10 @@ class System(MemoryBuffer):
         self._name: str = name
         self._shell: Shell = Shell(self)
         self._io: IOController = IOController(self)
-        self._disks: list[Disk] = []
-        self._disk: Disk | None = None
+        self._fs: FileSystem = FileSystem(self)
         self._memPtr: int = 0
         self._author: str = "Johan & Mumei"
-    
-    def add(self, disk: Disk) -> None:
-        """
-        Add a disk to the system.
-        """
-        self._disks.append(disk)
-
-    def mount(self, disk: Disk) -> None:
-        """
-        Mount a disk to the system.
-        """
-        disk.sys = self
-        self._disk = disk
-
-    def unmount(self) -> Disk:
-        """
-        Unmount the current disk from the system.
-        """
-        disk = self._disks.pop(self._disk)
-        self._disk = None
-        return disk
-    
+        
     def malloc(self) -> int:
         """
         Allocate a memory address.
@@ -54,7 +33,6 @@ class System(MemoryBuffer):
         """
         Boot the system.
         """
-        # Attempt to load a saved state
         self.shell.clear()
         try: self.loadState(path = path)
         except FileNotFoundError: self.setup()
@@ -67,6 +45,8 @@ class System(MemoryBuffer):
         self.shell.clear()
         try: self._loop()
         except KeyboardInterrupt: print("\n"); self.shell.exit()
+    
+    def setup(self) -> None: self._boilerPlate()
 
     def saveState(self, path: str = "./data/termOS.state"):
         """
@@ -75,8 +55,8 @@ class System(MemoryBuffer):
         state = {
             "name": self._name,
             "shell": self._shell,
-            "disks": self._disks,
-            "disk": self._disk,
+            "fs": self._fs,
+            "io": self._io,
             "mem_ptr": self._memPtr
         }
         with open(path, 'wb') as f: pickle.dump(state, f)
@@ -88,21 +68,34 @@ class System(MemoryBuffer):
         with open(path, 'rb') as f: state = pickle.load(f)
         self._name = state["name"]
         self._shell = state["shell"]
-        self._disks = state["disks"]
-        self._disk = state["disk"]
+        self._fs = state["fs"]
+        self._io = state["io"]
         self._memPtr = state["mem_ptr"]
         return self
-    
-    def setup(self) -> None:
+
+    def _loop(self):
         """
-        Setup the system if no saved state is found.
+        Helper function for the main loop of the system.
+        """
+        while self.fs.disk:
+            cmd, args, options = self.io.collector.readCmd()
+            self.shell.execute(
+                cmd     = cmd,
+                args    = args,
+                options = options
+            )
+
+    def _setup(self) -> None: ...
+    def _boilerPlate(self) -> None:
+        """
+        Helper function for the setup function.
         """
         with console.status("No saved state found. Initializing system..."): time.sleep(3)
         os.system("mkdir -p ./data")
         # Setup the root disk
         drive = Disk(name = "/")
-        self.add(drive)
-        self.mount(drive)
+        self.fs.add(drive)
+        self.fs.mount(drive)
         # Populate the root disk
         drive.createFolder("bin", addr = self.malloc())
         drive.createFolder("etc", addr = self.malloc())
@@ -115,29 +108,13 @@ class System(MemoryBuffer):
         user = home.createFolder("user", addr = self.malloc())
         user.createFile("Hello.txt", addr = self.malloc())
         user.createFolder("Documents", addr = self.malloc())
-
-    def _loop(self):
-        """
-        Helper function for the main loop of the system.
-        """
-        while self.disk:
-            cmd, args, options = self.io.collector.readCmd()
-            self.shell.execute(
-                cmd     = cmd,
-                args    = args,
-                options = options
-            )
     
-    @property
-    def disk(self) -> Disk | None: return self._disk
-    @disk.setter
-    def disk(self, other: Disk): self._disk = other
-
     @property
     def shell(self) -> Shell: return self._shell
     @property
     def io(self) -> IOController: return self._io
-
+    @property
+    def fs(self) -> FileSystem: return self._fs
     @property
     def author(self) -> str: return self._author
     

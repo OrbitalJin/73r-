@@ -1,14 +1,14 @@
-from engine.shell.commands.fetch import fetch
-from engine.shell.commands.addr import addr
-from engine.shell.commands.tree import tree
-from engine.shell.commands.find import find
-from engine.shell.commands.edit import edit
-from engine.shell.commands.cat import cat
-from engine.shell.commands.jmp import jmp
-from engine.shell.commands.ls import ls
-from engine.shell.commands.ll import ll
-from engine.shell.commands.rm import rm
-from engine.shell.commands.mv import mv
+from engine.sh.commands.fetch import fetch
+from engine.sh.commands.addr import addr
+from engine.sh.commands.tree import tree
+from engine.sh.commands.find import find
+from engine.sh.commands.edit import edit
+from engine.sh.commands.cat import cat
+from engine.sh.commands.jmp import jmp
+from engine.sh.commands.ls import ls
+from engine.sh.commands.ll import ll
+from engine.sh.commands.rm import rm
+from engine.sh.commands.mv import mv
 import inspect
 
 class Commands:
