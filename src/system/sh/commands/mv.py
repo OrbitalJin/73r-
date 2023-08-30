@@ -28,6 +28,11 @@ class mv(Command):
         else: dest = self.sys.fs.disk.current.find(name = dest_)
         
         if not dest: return self.sys.io.display.error(f"Destination not found: {dest_}")
+        
+        # Check if destination contains a file with the same name as the source.
+        exists: bool = dest.find(name = src.name) is not None
+        if exists: return self.sys.io.display.error(f"Destination already contains a file or directory with the same name: {src.name}")
+
         if not isinstance(dest, Folder | DotFolder): return self.sys.io.display.error(f"Destination is not a folder: {dest_}")
 
         src.parent.list().remove(src)
