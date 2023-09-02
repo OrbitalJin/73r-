@@ -17,6 +17,13 @@ class Shell:
         self._cogData : dict[dict] = self._generateCogData()
         self._history : list[str]  = []
 
+    def echo(self, args: dict = None, options: dict = None) -> None:
+        """
+        Print a message to the screen.
+        """
+        if not args: return self.sys.io.display.warning("No message specified.")
+        self.sys.io.display.print(" ".join(args.values()))
+
     def cd(self, args: dict = None, options: dict = None) -> None:
         """
         Change directory.
