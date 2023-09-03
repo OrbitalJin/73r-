@@ -23,8 +23,11 @@ class tp(Command):
 
         if not args: return self.sys.io.display.warning("No address specified. Use -h for help.")
 
-        source_addr: int = int(args.get(0), 16)
-        dest_addr: int = int(args.get(1), 16)
+        try: source_addr: int = int(args.get(0), 16)
+        except ValueError: return self.sys.io.display.warning("Invalid source address.")
+
+        try: dest_addr: int = int(args.get(1), 16)
+        except ValueError: return self.sys.io.display.warning("Invalid destination address.")
 
         src: Folder | File = self.sys.shell.commands.find._rfindAddr(
             folder = self.sys.fs.disk.root,
