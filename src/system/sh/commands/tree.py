@@ -1,8 +1,10 @@
 from system.core.interfaces.command import Command
-from system.core.folder import Folder
-from system.core.file import File
+from system.core.folder import Folder, DotFolder
+from system.core.file import File, DotFile
 from typing import Optional
 from rich.tree import Tree
+from rich.text import Text
+
 
 class tree(Command):
     """
@@ -32,15 +34,21 @@ class tree(Command):
     def _tree(self, dir: Folder, depth: int = 0, last: bool = True) -> None:
         indent: str = "    " * depth + "├── "
         indent_final : str = "    " * depth + "└── "
-        if depth == 0: self.sys.io.display.print(f"{indent_final}[{dir.hex_addr}] {dir.name}")
 
+        if len(dir.list()) == 0: color_file = "[green]"
+        else: color_file = "[bold green]"
+
+        if depth == 0: self.sys.io.display.print("[blue]" + indent_final + "["+ dir.hex_addr + "] " + dir.name + "[/]")
+        
         else:
-            if last == True or len(dir.list()) == 1: self.sys.io.display.print(f"{indent_final}[{dir.hex_addr}] {dir.name}")
-            else: self.sys.io.display.print(f"{indent}[{dir.hex_addr}] {dir.name}")
+            if last == True or len(dir.list()) == 1: 
+                self.sys.io.display.print(color_file + indent_final + "[/]" + "[" + dir.hex_addr + "] " + color_file + dir.name + "[/]")
+            else: 
+                self.sys.io.display.print( color_file + indent + "[/]" + "[" + dir.hex_addr + "] " + color_file + dir.name+ "[/]")
             
         for item in dir.list():   
-            if type(item) == Folder: self._tree(item, depth + 1, item == dir.list()[-1])
-            if isinstance(item, File):
+            if type(item) == Folder : self._tree(item, depth + 1, item == dir.list()[-1])
+            if type(item) ==  File:
                 if item == dir.list()[-1]: self.sys.io.display.print(f"    {indent_final}[{item.hex_addr}] {item.name}")
                 else: self.sys.io.display.print(f"    {indent}[{item.hex_addr}] {item.name}")
 
