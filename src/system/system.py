@@ -46,6 +46,7 @@ class System(MemoryBuffer):
         self.shell.commands.fetch.execute(args = None, options = None)
         try: self._loop()
         except KeyboardInterrupt: print("\n"); self.shell.exit()
+        except Exception as e: self.io.display.fatal(e)
     
     def setup(self) -> None: self._boilerPlate()
 

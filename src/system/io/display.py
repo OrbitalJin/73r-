@@ -11,12 +11,14 @@ class Display:
     def __init__(self, sys: sys.System) -> None:
         self.sys = sys
 
-    def print(self, message: str) -> None:
+    def print(self, message: str, bold: bool = False) -> None:
         """
         Print a message to the console.
         """
-        console.print(message)
-    
+        match bold:
+            case True: console.print(f"[bold]{message}[/]")
+            case False: console.print(message)
+
     def printLn(self, message: str) -> None:
         """
         Print a message to the console with a new line.
@@ -28,6 +30,16 @@ class Display:
         Log a message to the console.
         """
         console.log(message)
+
+    def fatal(self, message: str, bold: bool = False) -> None:
+        """
+        Print a fatal error message to the console.
+        """
+        match bold:
+            case True: self.log(f"[bold red] Runtime Error: [/]{message}")
+            case False: self.log(f"[red] Runtime Error: [/]{message}")
+
+        self.sys.shell._exit()
 
     def warning(self, message: str, bold: bool = False) -> None:
         """

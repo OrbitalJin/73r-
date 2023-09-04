@@ -66,9 +66,8 @@ class Shell:
         """
         Exit the system.
         """
-        self.sys.saveState()
         self.sys.io.display.log("Terminated - State Saved")
-        sys.exit(0)
+        self._exit()
 
     def help(self, args: dict = None, options: dict = None) -> None:
         """
@@ -94,6 +93,10 @@ class Shell:
         else: self.sys.io.display.error(f"Command '{cmd}' not found.")
     
     def cog(self) -> dict: return self._cogData
+
+    def _exit(self) -> None:
+        self.sys.saveState()
+        sys.exit(0)
 
     def _generateCogData(self) -> dict:
         """
