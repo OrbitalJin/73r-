@@ -44,7 +44,7 @@ class tree(Command):
         for item in dir.list():   
             if type(item) == Folder : self.tree(item, tree, depth + 1)
             if type(item) ==  File:
-                tree.add("[" +  "[cyan]" + dir.hex_addr + "[/]" + "] " + item.name)
+                tree.add("[" +  "[cyan]" + item.hex_addr + "[/]" + "] " + item.name)
         return tree
     def _tree(self, dir: Folder):
         self.sys.io.display.print(self.tree(dir))
