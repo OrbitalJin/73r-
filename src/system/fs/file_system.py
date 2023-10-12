@@ -33,7 +33,7 @@ class FileSystem:
         """
         Mount a disk to the system.
         """
-        disk.sys = self
+        disk.sys = self.sys
         self._disk = disk
 
     def unmount(self) -> Disk:
