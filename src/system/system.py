@@ -98,8 +98,9 @@ class System(MemoryBuffer):
         self.fs.mount(drive)
         # Populate the root disk
         drive.createFolder("bin", addr = self.malloc())
-        drive.createFolder("etc", addr = self.malloc())
         drive.createFolder("tmp", addr = self.malloc())
+        etc = drive.createFolder("etc", addr = self.malloc())
+        etc.createFile("passwd", addr = self.malloc())
         # Populate the home directory with dummy users
         home = drive.createFolder("home", addr = self.malloc())
         home.createFolder("guest", addr = self.malloc())

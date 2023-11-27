@@ -4,7 +4,7 @@ import system.system as sys
 
 from system.sh.commands import Commands
 from system.sh.console import console
-import inspect, sys, os
+import inspect, sys, os, platform
 
 # TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
@@ -59,7 +59,9 @@ class Shell:
         """
         Clear the screen.
         """
-        os.system("clear")
+        match platform.platform():
+            case "Windows": os.system("cls")
+            case _: os.system("clear")
         self.sys.io.display.header()
 
     def exit(self, args: dict = None, options: dict = None) -> None:
