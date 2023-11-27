@@ -6,10 +6,41 @@ from system.core.interfaces.structs import colors
 from typing import Any
 import readline
 
+
+
+class AutoCompleter:
+    autocomplete: list[str]
+    
+    def __init__(self) -> None:
+        """
+        Setup tab completion.
+        """
+        # Set the tab completer function
+        readline.set_completer(self.tabCompletionHook)
+        # Enable tab completion
+        readline.parse_and_bind('tab: complete')
+
+    def setOptions(self, options: list[str]) -> None:
+        """
+        Set the options for tab completion.
+        """
+        self.autocomplete = options
+        readline.set_completer(self.tabCompletionHook)
+    
+    # A list of commands for tab completion
+    def tabCompletionHook(self, text, state):
+        """
+        Simple tab completer function.
+        """
+        options = [cmd for cmd in self.autocomplete if cmd.startswith(text)]
+        return options[state] if state < len(options) else None
+
+
 class Collector:
     """
     The collector is responsible for collecting user input across the system.
     """
+    completer: AutoCompleter = AutoCompleter()
     def __init__(self, sys: sys.System) -> None:
         self.sys = sys
         self._cmd: str | None = None
@@ -38,16 +69,6 @@ class Collector:
         self.cmd, self.args, self.options = self._parse(entry)
         return (self.cmd, self.args, self.options)
 
-    def promptEdit(self, prompt: str = "", prefill: str = None) -> str | None:
-        def hook():
-            readline.insert_text(prefill)
-            readline.redisplay()
-
-        readline.set_pre_input_hook(hook)
-        result = input(prompt)
-        readline.set_pre_input_hook()
-        return result
-    
     def _parse(self, entry: str) -> tuple[str | None | dict]:
         """
         Parse the user's input.

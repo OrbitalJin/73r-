@@ -17,7 +17,7 @@ class Shell:
         self._cogData : dict[dict] = self._generateCogData()
         self._history : list[str]  = []
 
-    def echo(self, args: dict = None, options: dict = None) -> None:
+    def say(self, args: dict = None, options: dict = None) -> None:
         """
         Print a message to the screen.
         """
@@ -69,9 +69,9 @@ class Shell:
         self.sys.io.display.log("Terminated - State Saved")
         self._exit()
 
-    def help(self, args: dict = None, options: dict = None) -> None:
+    def man(self, args: dict = None, options: dict = None) -> None:
         """
-        Display this help message.
+        Display this manual.
         """
         for cmd, data in self._cogData.items():
             self.sys.io.display.print(
@@ -80,7 +80,7 @@ class Shell:
                     desc = data.get("desc")
                 ))
             
-    def history(self, args: dict = None, options: dict = None) -> None:
+    def record(self, args: dict = None, options: dict = None) -> None:
         """
         Display the command history.
         """
@@ -91,7 +91,7 @@ class Shell:
         self._history.append(cmd)
         if cmd in self.cog().keys(): self.cog()[cmd].get("func")(args, options)
         else: self.sys.io.display.error(f"Command '{cmd}' not found.")
-    
+
     def cog(self) -> dict: return self._cogData
 
     def _exit(self) -> None:
@@ -104,6 +104,7 @@ class Shell:
         """
         data = self.commands.cog()
         for cmd, obj in inspect.getmembers(self, predicate = inspect.ismethod):
+            print(cmd)
             if not cmd.startswith("_") and cmd != "cog" and cmd != "execute":
                 data[cmd] = {
                     "func": obj,

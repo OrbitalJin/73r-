@@ -5,13 +5,13 @@ from system.core.interfaces.command import Command
 from system.core.file import File, DotFile
 from typing import Optional
 
-class cat(Command):
+class read(Command):
     """
     Display the content of a file.
     """
     def __init__(self, shell: sh.Shell) -> None:
         super().__init__(shell)
-        self.usage = "cat <file>"
+        self.usage = f"{self.name} <file>"
         self.options = None
 
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
@@ -21,4 +21,4 @@ class cat(Command):
         name: str = args.get(0)
         file: File = self.sys.fs.disk.current.find(name = name)
         if not file or not isinstance(file, File | DotFile): return print(f"File not found: {name}")
-        self.sys.io.display.print(file.content)
+        if file.content: self.sys.io.display.print(file.content)

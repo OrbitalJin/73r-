@@ -1,6 +1,5 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
-
 import system.sh.shell as sh
 import system.system as sys
 

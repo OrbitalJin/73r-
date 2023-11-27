@@ -1,1 +1,0 @@
-poetry run python3 termOS.py

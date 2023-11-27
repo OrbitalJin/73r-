@@ -46,7 +46,7 @@ class System(MemoryBuffer):
         self.shell.commands.fetch.execute(args = None, options = None)
         try: self._loop()
         except KeyboardInterrupt: print("\n"); self.shell.exit()
-        except Exception as e: self.io.display.fatal(e)
+        # except Exception as e: self.io.display.fatal(e)
     
     def setup(self) -> None: self._boilerPlate()
 
@@ -56,9 +56,7 @@ class System(MemoryBuffer):
         """
         state = {
             "name": self._name,
-            "shell": self._shell,
             "fs": self._fs,
-            "io": self._io,
             "mem_ptr": self._memPtr
         }
         with open(path, 'wb') as f: pickle.dump(state, f)
@@ -69,9 +67,7 @@ class System(MemoryBuffer):
         """
         with open(path, 'rb') as f: state = pickle.load(f)
         self._name = state["name"]
-        self._shell = state["shell"]
         self._fs = state["fs"]
-        self._io = state["io"]
         self._memPtr = state["mem_ptr"]
         return self
 
@@ -80,6 +76,7 @@ class System(MemoryBuffer):
         Helper function for the main loop of the system.
         """
         while self.fs.disk:
+            self._updateCompleter()
             cmd, args, options = self.io.collector.readCmd()
             self.shell.execute(
                 cmd     = cmd,
@@ -111,6 +108,14 @@ class System(MemoryBuffer):
         user = home.createFolder("user", addr = self.malloc())
         user.createFile("Hello.txt", addr = self.malloc())
         user.createFolder("Documents", addr = self.malloc())
+
+    def _updateCompleter(self) -> None:
+        """
+        Update the tab completion options.
+        """
+        self.io.collector.completer.setOptions(
+            list(self.shell.cog().keys()) + [buf.name for buf in self.fs.disk.current.list()]
+        )
     
     @property
     def shell(self) -> Shell: return self._shell
@@ -120,6 +125,8 @@ class System(MemoryBuffer):
     def fs(self) -> FileSystem: return self._fs
     @property
     def author(self) -> str: return self._author
+    @property
+    def time(self) -> str: return time.strftime("%H:%M:%S")
     
     def __repr__(self) -> str: return f"<System({self.name})>"
     def __str__(self) -> str: return f"System({self.name})"
