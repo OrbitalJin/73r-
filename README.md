@@ -141,8 +141,8 @@ classDiagram
 # TODO
 
 -   [ ] Implement `env` variables
--   [ ] Implement user setup
 -   [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
+-   [ ] Implement user setup
 -   [x] SDK for creating custom shell commands & apps
 -   [x] Implement `echo` command
 -   [x] Implement option parsing & handling

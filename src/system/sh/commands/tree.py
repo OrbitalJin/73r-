@@ -13,7 +13,6 @@ class tree(Command):
     dotfolder_on = False
     dotfile_on = False
     
-
     def __init__(self, shell) -> None:
         super().__init__(shell)
         self.usage = "tree [path]"
@@ -26,10 +25,8 @@ class tree(Command):
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:
         if options and "-h" in options: return self.sys.io.display.print(self.help())
         if not args:
-            if options and "-f" in options:
-                 self.dotfile_on = True
-            if options and "-d" in options:
-                 self.dotfolder_on = True 
+            if options and "-f" in options: self.dotfile_on = True
+            if options and "-d" in options: self.dotfolder_on = True 
             if options and "-a" in options: folder = self.sys.fs.disk.root
             else: folder = self.sys.fs.disk.current
         else: folder = self.sys.fs.disk.current.find(name = args.get(0))
@@ -41,15 +38,12 @@ class tree(Command):
     # TODO: Print the hex_addr attribute of each item in the tree on the far left
     
     def dotfolders(self):
-        if self.dotfolder_on:
-            return DotFolder
-        else:
-            return Folder
+        if self.dotfolder_on: return DotFolder
+        else: return Folder
+
     def dotfiles(self):
-        if self.dotfile_on:
-            return DotFile
-        else:
-            return File
+        if self.dotfile_on: return DotFile
+        else: return File
 
 
     def tree(self, dir: Folder,tree : Tree = Tree(""), depth : int = 0):
@@ -66,6 +60,7 @@ class tree(Command):
             if type(item) ==  File or type(item) == self.dotfiles():
                 tree.add("[" +  "[cyan]" + item.hex_addr + "[/]" + "] " + item.name)
         return tree
+    
     def _tree(self, dir: Folder):
         self.sys.io.display.print(self.tree(dir))
         # resetting some variables (flags)

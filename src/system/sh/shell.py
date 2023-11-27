@@ -104,7 +104,6 @@ class Shell:
         """
         data = self.commands.cog()
         for cmd, obj in inspect.getmembers(self, predicate = inspect.ismethod):
-            print(cmd)
             if not cmd.startswith("_") and cmd != "cog" and cmd != "execute":
                 data[cmd] = {
                     "func": obj,

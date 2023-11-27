@@ -3,8 +3,9 @@ import system.sh.shell as sh
 
 from system.core.interfaces.command import Command
 from system.meta.ascii import ascii
+
+import platform, psutil, os, subprocess
 from typing import Optional
-import platform, psutil
 
 class fetch(Command):
     """
@@ -24,7 +25,7 @@ class fetch(Command):
             .format(
                 os   = f":computer_disk: os: {self.sys.name}",
                 host = f":house: host: {platform.node()}",
-                cpu  = f":computer: cpu: {platform.processor() or 'unknown'}",
+                cpu  = f":computer: cpu: {self.cpu()}",
                 pkgs = f":package: pkgs: {len(self.shell.cog())}",
                 ram  = f":brain: ram: {self.ram()}"
             )
@@ -41,6 +42,17 @@ class fetch(Command):
             total = int(ram.total / 1024**2)
         )
     
+    def cpu(self) -> str:
+        """
+        Helper function for fetch.
+        """
+        try:
+            if platform.system() == 'Linux': return os.popen("cat /proc/cpuinfo | grep 'model name' | uniq | awk -F ':' '{print $2}'").read().strip()   
+            elif platform.system() == 'Windows': return os.environ['PROCESSOR_IDENTIFIER']
+            elif platform.system() == 'Darwin': return subprocess.check_output(['sysctl', '-n', 'machdep.cpu.brand_string']).decode('utf-8').strip()
+            else: return "unknown"
+        except Exception as e: return "unknown"
+
     def _render(self, info: str) -> str:
         """
         Helper function for fetch.
