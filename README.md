@@ -145,6 +145,7 @@ classDiagram
 -   [ ] Implement `env` variables
 -   [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
 -   [ ] Implement user setup
+-   [x] Implemented context a-somewhat-conext-aware tab completion
 -   [x] Improved the `read` command (richified)
 -   [x] Implemented `tedit` command
 -   [x] SDK for creating custom shell commands & apps
