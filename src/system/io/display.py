@@ -1,8 +1,12 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
-import system.system as sys
 
+import system.system as sys
 from system.sh.console import console
+
+from rich import print as rprint
+from rich.panel import Panel
+from typing import Any
 
 class Display:
     """
@@ -79,11 +83,25 @@ class Display:
         """
         console.rule(f"[bold green] {self.sys.name} [/]", style = "bold green")
 
-    def editorHeader(self, filename: str) -> None:
+    def rule(self, message: str, style: str = "bold blue") -> None:
         """
-        Print the editor header.
+        Print a rule to the console.
         """
-        console.print(
-                f"[bold](*) bim[/] - Editing [underline]{filename}[/] | Press [red]Enter[/red] to save and exit.\n",
-                justify = "center"
-            )
+        console.rule(message, style = style)
+
+    def boxed(self, message: str, title: str = None, sub: str = None, style: str = "bold blue") -> None:
+        """
+        Print a boxed message to the console.
+        """
+        rprint(Panel(
+            renderable = message,
+            title      = title,
+            subtitle   = sub,
+            style      = style
+        ))
+
+    def renderable(self, renderable: Any) -> None:
+        """
+        Print a renderable.
+        """
+        rprint(renderable)

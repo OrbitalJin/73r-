@@ -11,7 +11,7 @@ class tedit(Command):
     """
     def __init__(self, shell: sh.Shell):
         super().__init__(shell)
-        self.usage = 'edit <file>'
+        self.usage = 'tedit <file>'
         self.options = {"-h": "Display the help message."}
 
     def execute(self, args: Optional[dict], options: Optional[dict]) -> None:

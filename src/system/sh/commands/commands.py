@@ -14,10 +14,11 @@ from system.sh.commands.rm import rm
 from system.sh.commands.mv import mv
 from system.sh.commands.tp import tp
 from system.sh.commands.cp import cp
+from typing import Any
 
 class Commands:
     def __init__(self, shell) -> None:
-        self.commands = {}
+        self.commands: dict[str, Any] = {}
         self.shell = shell
         self.attach(fetch(shell))
         self.attach(tedit(shell))
@@ -46,6 +47,7 @@ class Commands:
             "usage": command.usage,
             "options": command.options
         }
+        # so that it can be accessed as a property i.e. shell.commands.<command>
         setattr(self, command.name, command)
 
     def cog(self) -> dict:

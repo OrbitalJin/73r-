@@ -3,30 +3,28 @@ from system.sdk import Command
 
 from typing import Optional
 
-# Defining a custom command 
 class MyCMD(Command):
     """
-    My custom command
+    My awesome very useful command. (Definitely not a hello world)
     """
     def __init__(self, shell) -> None:
         super().__init__(shell = shell)
-        self.usage      : str = "mycommand [args] [options]"
-        self.options    : Optional[dict] = {
-            "-v": "Display the version of this command.",
+        self.usage: str = "mycmd [args] [options]"
+        self.options: Optional[dict] = {
+            "-h": "Display the help message.",
+            "-v": "Display the version."
         }
-    
+
     def execute(self, args: dict = None, options: dict = None) -> None:
-        # Handle options
-        if options:
-            if "-v" in options: return self.version()
-            else: return self.shell.sys.io.display.error("Invalid option.")
-        # Handle args
-        if not args: return print("Hello World!")
-        for arg in args.values():
-            print(f"Hello {arg}!")
+        if options and "-h" in options: return self.help()
+        if options and "-v" in options: return self.version()
         
+        if not args: return self.sys.io.display.print("Hello, world!")
+        if args:
+            for arg in args.values(): self.sys.io.display.print(f"Hello, {arg}!")
+
     def version(self) -> None:
-        print("1.0.0")
+        self.sys.io.display.print("MyCMD v1.0.0")
 
 class time(Command):
     """
@@ -45,7 +43,7 @@ class time(Command):
 
 # Entry point
 if __name__ == "__main__":
-    system: System = System(name = "termOS")
+    system: System = System(name = "TermOS")
     system.shell.commands.attach(MyCMD(system.shell))
     system.shell.commands.attach(time(system.shell))
     system.boot("./data/termOS.state")

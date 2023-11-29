@@ -6,7 +6,6 @@ from system.sh.commands import Commands
 from system.sh.console import console
 import inspect, sys, os, platform
 
-# TODO: Implement options for rm e.g rm -r for recursive removal
 class Shell:
     """
     The shell is the user interface for the system.
@@ -113,7 +112,6 @@ class Shell:
                 }
         return data
     
-
     @property
     def commands(self) -> Commands: return self._commands
     @property   

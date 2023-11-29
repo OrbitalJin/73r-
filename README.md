@@ -1,5 +1,7 @@
 # TermOS
 
+termos is a lightweight, cross-platform, open-source, terminal-based operating system written in python. it is a "ring 0" operating system, meaning that it is the first program to run when the computer boots up. it is designed to be a simple, yet powerful, and extensible providing a documented sdk enabling user to extend the operating system with their own custom shell commands and apps.
+
 ## Arch
 
 Architectural overview of the project using mermaid class diagrams
@@ -143,6 +145,8 @@ classDiagram
 -   [ ] Implement `env` variables
 -   [ ] Recursive tree using `rich` (hide dotfiles & dotfolders)
 -   [ ] Implement user setup
+-   [x] Improved the `read` command (richified)
+-   [x] Implemented `tedit` command
 -   [x] SDK for creating custom shell commands & apps
 -   [x] Implement `echo` command
 -   [x] Implement option parsing & handling

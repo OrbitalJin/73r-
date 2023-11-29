@@ -3,6 +3,9 @@ import system.sh.shell as sh
 
 from system.core.interfaces.command import Command
 from system.core.file import File, DotFile
+from system.sh.commands.tedit import TEdit
+
+from rich.syntax import Syntax
 from typing import Optional
 
 class read(Command):
@@ -21,4 +24,23 @@ class read(Command):
         name: str = args.get(0)
         file: File = self.sys.fs.disk.current.find(name = name)
         if not file or not isinstance(file, File | DotFile): return print(f"File not found: {name}")
-        if file.content: self.sys.io.display.print(file.content)
+        if not file.content: return None
+        
+        is_supported: bool = file.type in TEdit.lang
+        if not is_supported:  return self.sys.io.display.boxed(
+            message = file.content,
+            title   = file.name,
+            sub     = "EOF",
+        )
+        renderable: Syntax = Syntax(
+                code = file.content,
+                lexer = TEdit.lang.get(file.type, "markdown"),
+                theme = "nord",
+                line_numbers = True,
+            )
+        self.sys.io.display.boxed(
+            message = renderable,
+            title   = file.name,
+            sub     = "EOF",
+        )
+

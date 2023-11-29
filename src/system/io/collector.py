@@ -1,15 +1,16 @@
 # To prevent running into circular imports when annotating, we use the __future__ module
 from __future__ import annotations
 import system.system as sys
-
 from system.core.interfaces.structs import colors
+
 from typing import Any
 import readline
 
-
-
 class AutoCompleter:
-    autocomplete: list[str]
+    """
+    The Autocompleter is responsible for tab completion.
+    """
+    options: list[str]
     
     def __init__(self) -> None:
         """
@@ -24,7 +25,7 @@ class AutoCompleter:
         """
         Set the options for tab completion.
         """
-        self.autocomplete = options
+        self.options = options
         readline.set_completer(self.tabCompletionHook)
     
     # A list of commands for tab completion
@@ -32,7 +33,7 @@ class AutoCompleter:
         """
         Simple tab completer function.
         """
-        options = [cmd for cmd in self.autocomplete if cmd.startswith(text)]
+        options = [cmd for cmd in self.options if cmd.startswith(text)]
         return options[state] if state < len(options) else None
 
 
@@ -47,18 +48,17 @@ class Collector:
         self._args: dict[str, str] | None = None
         self._options: dict[str, str] | None = None
 
-    def readCmd(self) -> tuple[str] | None:
+    def readCmd(self) -> tuple[str | None]:
         """
         Read a command from the user.
         """
-        self.cmd, self.args, self.options = self.prompt(
+        return self.prompt(
             prompt = "{green}>>>{end} {blue}{path}{end} ".format(
                 green = colors.OKGREEN,
                 blue  = colors.OKCYAN,
                 end   = colors.ENDC,
                 path  = self.sys.fs.disk.current.path(),
             ))
-        return (self.cmd, self.args, self.options)
 
     def prompt(self, prompt: str) -> tuple[str | None]:
         """
@@ -120,23 +120,3 @@ class Collector:
     def options(self) -> dict[str, str] | None: return self._options
     @options.setter
     def options(self, value: dict[str, str] | None) -> None: self._options = value       
-
-
-
-# def promptEdit(self, prompt: str, prefill: str = None) -> str | None:
-    # lines = []
-    # def hook():
-        # readline.insert_text(prefill + "\n" + "\n".join(lines))
-        # readline.redisplay()
-    # readline.set_pre_input_hook(hook)
-# 
-    # try:
-        # while True:
-            # line = input(prompt)
-            # if line == "wx": break
-            # if line == "q": return prefill
-            # lines.append(line)
-# 
-    # except KeyboardInterrupt:  print("\n Done editing.")
-    # finally: readline.set_pre_input_hook()
-    # return "\n".join(lines)

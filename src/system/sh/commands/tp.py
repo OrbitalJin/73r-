@@ -43,7 +43,7 @@ class tp(Command):
 
         if dest is None: return self.sys.io.display.warning("Destination address not found.")
 
-        if not isinstance(dest, Folder | DotFolder): return self.sys.io.display.warning("Cannot teleport source into a file.")
+        if not isinstance(dest, Folder | DotFolder): return self.sys.io.display.warning("Destination must be a folder.")
 
         src.parent.list().remove(src)
         dest.add(src)

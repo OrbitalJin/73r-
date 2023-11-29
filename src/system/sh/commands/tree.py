@@ -33,9 +33,6 @@ class tree(Command):
         if not folder or not isinstance(folder, Folder): return self.sys.io.display.error(f"Folder not found: {args.get(0)}")
 
         self._tree(folder)
-
-    # TODO: Ignore dotfiles & dotfolders
-    # TODO: Print the hex_addr attribute of each item in the tree on the far left
     
     def dotfolders(self):
         if self.dotfolder_on: return DotFolder
@@ -44,7 +41,6 @@ class tree(Command):
     def dotfiles(self):
         if self.dotfile_on: return DotFile
         else: return File
-
 
     def tree(self, dir: Folder,tree : Tree = Tree(""), depth : int = 0):
         if depth == 0:
@@ -66,3 +62,30 @@ class tree(Command):
         # resetting some variables (flags)
         self.dotfolder_on = False
         self.dotfile_on = False
+
+
+
+# def _tree(self, folder: Folder, depth: int = 0) -> None:
+#     """
+#     Helper Function for tree.
+#     """
+#     if isinstance(folder, File): return
+#     tree: Tree = Tree(f"[bold blue]{folder.name}[/]")
+
+#     for item in folder.list():
+#         if isinstance(item, Folder): self._branch(tree, item, depth + 1)
+#         elif isinstance(item, File): tree.add(f"[green]{item.name}[/]")
+
+#     self.sys.io.display.print(tree)
+
+# def _branch(self, tree: Tree, folder: Folder, depth: int) -> None:
+#     """
+#     Helper Function for tree.
+#     """
+#     branch: Tree = Tree(f"[bold blue]{folder.name}[/]")
+
+#     for item in folder.list():
+#         if isinstance(item, Folder): self._branch(branch, item, depth + 1)
+#         elif isinstance(item, File): branch.add(f"[green]{item.name}[/]")
+
+#     tree.add(branch)
