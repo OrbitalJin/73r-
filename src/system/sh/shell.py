@@ -58,9 +58,8 @@ class Shell:
         """
         Clear the screen.
         """
-        match platform.platform():
-            case "Windows": os.system("cls")
-            case _: os.system("clear")
+        if "Windows" in platform.system(): os.system("cls")
+        else: os.system("clear")
         self.sys.io.display.header()
 
     def exit(self, args: dict = None, options: dict = None) -> None:

@@ -50,7 +50,7 @@ class System(MemoryBuffer):
     
     def setup(self) -> None: self._boilerPlate()
 
-    def saveState(self, path: str = "./data/termOS.state"):
+    def saveState(self, path: str = os.path.join(os.getcwd(), "data", "termOS.state")) -> None:
         """
         Save the current state of the system to a file.
         """
@@ -59,7 +59,9 @@ class System(MemoryBuffer):
             "fs": self._fs,
             "mem_ptr": self._memPtr
         }
-        with open(path, 'wb') as f: pickle.dump(state, f)
+        # Create the data directory if it doesn't exist
+        os.makedirs(os.path.dirname(path), exist_ok = True)
+        with open(path, 'wb+') as f: pickle.dump(state, f)
 
     def loadState(self, path: str) -> "System":
         """
