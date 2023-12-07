@@ -2,6 +2,7 @@ from system.core.interfaces.command import Command
 from system.sh.commands.fetch import fetch
 from system.sh.commands.tedit import tedit
 from system.sh.commands.clock import clock
+from system.sh.commands.runpy import runpy
 from system.sh.commands.addr import addr
 from system.sh.commands.tree import tree
 from system.sh.commands.find import find
@@ -22,6 +23,7 @@ class Commands:
         self.shell = shell
         self.attach(fetch(shell))
         self.attach(tedit(shell))
+        self.attach(runpy(shell))
         self.attach(clock(shell))
         self.attach(tree(shell))
         self.attach(find(shell))

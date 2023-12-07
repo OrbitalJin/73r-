@@ -106,6 +106,9 @@ classDiagram
 
 ## Shell
 
+-   [x] Implement `runpy` command 
+-   [x] Implement `clock` app 
+-   [x] Implement `tedit` app 
 -   [x] Implement `del` command (_Not thoroughly tested_)
 -   [x] Implement `cp` command (_Not thoroughly tested_)
 -   [x] Implement `tp` command
